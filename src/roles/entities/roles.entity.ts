@@ -8,4 +8,7 @@ export class Roles extends UserBaseModifiedEntity {
 
   @Column({ type: 'varchar', length: 50, nullable: false })
   name: string;
+
+  @Column('text', { array: true, nullable: false })
+  permissions: string[];
 }

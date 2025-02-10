@@ -11,4 +11,12 @@ export class CreateRoleDto {
   @MinLength(3)
   @MaxLength(50)
   name: string;
+
+  @ApiProperty({
+    example: '["11","112","333"]',
+    description: 'Permission of the role',
+  })
+  @IsString()
+  @IsNotEmpty()
+  permissions: string[];
 }

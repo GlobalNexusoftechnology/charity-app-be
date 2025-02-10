@@ -14,6 +14,9 @@ export class Users extends UserBaseModifiedEntity {
 
     @Column({ type: 'varchar', length: 50 })
     username: string;
+    
+    @Column({type : 'uuid'})
+    role_id: string;
 
     @Column({ type: 'text', unique: true })
     refresh_token?: string;

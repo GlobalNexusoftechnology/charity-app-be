@@ -32,6 +32,11 @@ export class Users1739174364069 implements MigrationInterface {
                   isNullable: false,
                 },
                 {
+                  name: "role_id",
+                  type: "uuid",
+                  isNullable: false,
+                },
+                {
                   name: "refresh_token",
                   type: "text",
                   isNullable: true,

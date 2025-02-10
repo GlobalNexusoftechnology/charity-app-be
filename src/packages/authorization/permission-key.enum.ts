@@ -1,13 +1,13 @@
 export const enum PermissionKey {
     // user
-    CreateUser = '141',
-    GetUser = '142',
-    EditUser = '143',
-    DeleteUser = '144',
+    CreateUser = '101',
+    GetUser = '102',
+    EditUser = '103',
+    DeleteUser = '104',
 
     // role
-    CreateRole = '161',
-    GetRole = '162',
-    EditRole = '163',
-    DeleteRole = '164',
+    CreateRole = '111',
+    GetRole = '112',
+    EditRole = '113',
+    DeleteRole = '114',
 }
