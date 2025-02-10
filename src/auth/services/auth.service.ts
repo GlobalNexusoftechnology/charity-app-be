@@ -9,15 +9,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
 import { Users } from 'src/user/entities/user.entity';
-import { UsersService } from 'src/user/services/user.service';
 import { Repository } from 'typeorm';
-
 import { TokenPayload } from '../types/types';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { UserService } from 'src/user/user.service';
+
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private usersService: UserService,
     private jwtService: JwtService,
     private readonly configService: ConfigService,
     @InjectRepository(Users)
