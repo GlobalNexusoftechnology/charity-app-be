@@ -7,6 +7,8 @@ import { RolesModule } from './roles/roles.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { PdfService } from './pdf/pdf.service';
+import { PdfController } from './pdf/pdf.controller';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, PdfController],
+  providers: [AppService, PdfService],
 })
 export class AppModule {}

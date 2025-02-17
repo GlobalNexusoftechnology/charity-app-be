@@ -1,0 +1,6 @@
+{
+    "title": "Sample PDF",
+    "content": "This is a sample PDF generated using pdf-lib in a NestJS project.",
+    "author": "Your Name",
+    "date": "2023-10-01"
+}
