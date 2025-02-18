@@ -9,6 +9,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PdfService } from './pdf/pdf.service';
 import { PdfController } from './pdf/pdf.controller';
+import { ExcelController } from './excel/excel.controller';
+import { ExcelService } from './excel/excel.service';
 
 @Module({
   imports: [
@@ -26,7 +28,7 @@ import { PdfController } from './pdf/pdf.controller';
     UserModule,
     AuthModule,
   ],
-  controllers: [AppController, PdfController],
-  providers: [AppService, PdfService],
+  controllers: [AppController, PdfController, ExcelController],
+  providers: [AppService, PdfService, ExcelService],
 })
 export class AppModule {}
