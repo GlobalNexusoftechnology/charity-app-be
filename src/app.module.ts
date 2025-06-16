@@ -7,8 +7,13 @@ import { RolesModule } from './roles/roles.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { PdfService } from './pdf/pdf.service';
+import { PdfController } from './pdf/pdf.controller';
+import { ExcelController } from './excel/excel.controller';
+import { ExcelService } from './excel/excel.service';
 import { TasksModule } from './tasks/tasks.module';
 import { NotificationModule } from './notification/notification.module';
+
 
 @Module({
   imports: [
@@ -28,7 +33,7 @@ import { NotificationModule } from './notification/notification.module';
     TasksModule,
     NotificationModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, PdfController, ExcelController],
+  providers: [AppService, PdfService, ExcelService],
 })
 export class AppModule {}

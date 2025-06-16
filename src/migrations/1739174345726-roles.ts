@@ -20,6 +20,12 @@ export class Roles1739174345726 implements MigrationInterface {
                         isNullable: false,
                     },
                     {
+                        name: "permissions",
+                        type: "text",
+                        isArray: true,
+                        isNullable: false,
+                    },
+                    {
                         name: "created_by",
                         type: "uuid",
                         isNullable: true,
@@ -44,6 +50,7 @@ export class Roles1739174345726 implements MigrationInterface {
                         type: "boolean",
                         default: false,
                     },
+
                 ],
             }),
             true
