@@ -11,6 +11,9 @@ import { PdfService } from './pdf/pdf.service';
 import { PdfController } from './pdf/pdf.controller';
 import { ExcelController } from './excel/excel.controller';
 import { ExcelService } from './excel/excel.service';
+import { TasksModule } from './tasks/tasks.module';
+import { NotificationModule } from './notification/notification.module';
+
 
 @Module({
   imports: [
@@ -27,6 +30,8 @@ import { ExcelService } from './excel/excel.service';
     RolesModule,
     UserModule,
     AuthModule,
+    TasksModule,
+    NotificationModule,
   ],
   controllers: [AppController, PdfController, ExcelController],
   providers: [AppService, PdfService, ExcelService],
