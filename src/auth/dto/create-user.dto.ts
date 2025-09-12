@@ -1,28 +1,64 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsEnum,
+  IsBoolean,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+export enum AuthProvider {
+  PHONE = 'phone',
+  GOOGLE = 'google',
+}
 
 export class CreateUserDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'johndoe@mail.com',
-    description: 'email of the user',
+    description: 'Email of the user (for Google/email signup)',
   })
   @IsString()
-  @IsNotEmpty()
-  email: string;
+  @IsOptional()
+  email?: string;
 
-  @ApiProperty({
-    example: '1234',
-    description: 'passowrd of the user',
+  @ApiPropertyOptional({
+    example: '+911234567890',
+    description: 'Phone number of the user (for phone signup)',
   })
   @IsString()
-  @IsNotEmpty()
-  password: string;
+  @IsOptional()
+  phone_number?: string;
 
   @ApiProperty({
-    example: '1234',
-    description: 'passowrd of the user',
+    example: 'johndoe',
+    description: 'Username of the user',
   })
   @IsString()
   @IsNotEmpty()
   username: string;
+
+  @ApiPropertyOptional({
+    example: '1234',
+    description: 'Password of the user (optional for Google signup)',
+  })
+  @IsString()
+  @IsOptional()
+  password?: string;
+
+  @ApiPropertyOptional({
+    enum: AuthProvider,
+    description: 'Type of signup (phone or Google)',
+    default: AuthProvider.PHONE,
+  })
+  @IsEnum(AuthProvider)
+  @IsOptional()
+  auth_provider?: AuthProvider;
+
+  @ApiPropertyOptional({
+    description: 'OTP verification status',
+    example: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  is_verified?: boolean;
 }

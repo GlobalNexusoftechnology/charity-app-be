@@ -27,11 +27,18 @@ import { JwtRefreshAuthGuard } from '../guards/jwt-refresh-auth.guard';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { VerifyOtpDto } from '../dto/verify-otp.dto';
+import { SendOtpDto } from '../dto/send-otp.dto';
+import { OtpService } from '../services/otp.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 @ApiTags('Auth Controller')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private otpService: OtpService,
+  ) {}
 
   @Public()
   @HttpCode(HttpStatus.OK)
@@ -76,12 +83,9 @@ export class AuthController {
     status: 200,
     description: 'SignUp Successfully',
   })
-  async signUp(
-    @Body() signUpDto: CreateUserDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
+  async signUp(@Body() signUpDto: CreateUserDto) {
     try {
-      return this.authService.signUp(signUpDto, response);
+      return this.authService.signUp(signUpDto);
     } catch (error) {
       console.error('Error during sign-up:', error);
       throw error;
@@ -150,15 +154,12 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(GoogleAuthGuard)
-  loginGoogle() {}
+  async loginGoogle() {}
 
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  async googleCallback(
-    @CurrentUser() user: Users,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    await this.authService.signIn(response, user, true);
+  async googleCallback(@Req() req) {
+    await this.authService.googleLogin(req.user);
   }
 
   @Post('change-password')
@@ -171,5 +172,28 @@ export class AuthController {
 
     await this.authService.changePassword(userId, password);
     return { message: 'Password changed successfully' };
+  }
+
+  //OTP
+  @Public()
+  @Post('send-otp')
+  async sendOtp(@Body() dto: SendOtpDto) {
+    return this.otpService.sendOtp(dto.phone_number);
+  }
+
+  @Public()
+  @Post('verify-otp')
+  async verifyOtp(
+    @Body() dto: VerifyOtpDto & CreateUserDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.otpService.verifyOtp(dto, response);
+  }
+
+  // Example of a protected route
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  getProfile(@Req() req) {
+    return req.user;
   }
 }

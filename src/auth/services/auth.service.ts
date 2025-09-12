@@ -8,11 +8,12 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
-import { Users } from 'src/user/entities/user.entity';
+import { AuthProvider, Users } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { TokenPayload } from '../types/types';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
+import { OtpService } from './otp.service';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
+    private otpService: OtpService,
   ) {}
 
   async signIn(response: Response, user: Users, redirect: boolean = false) {
@@ -64,48 +66,14 @@ export class AuthService {
   //   }
   // }
 
-  async signUp(signUpDto: CreateUserDto, response: Response) {
-    const payload = {
-      username: signUpDto.email.trim(),
-      email: signUpDto.email.trim(),
-      password: signUpDto.password,
-    };
-    const isUserExist = await this.usersService.findOne(signUpDto.email.trim());
+  async signUp(signUpDto: CreateUserDto) {
+    const isUserExist = await this.usersService.findOne(signUpDto.phone_number);
 
     if (isUserExist) {
       throw new BadRequestException('email already exists');
     }
-
-    const { password, ...rest } = payload;
-
-    const saltRounds = 10;
-    const hash = await bcrypt.hash(password, saltRounds);
-
-    const user: Users = await this.usersService.create({
-      password: hash,
-      ...rest,
-    });
-
-    const userPayload: TokenPayload = {
-      sub: user.id,
-      email: user.email,
-      username: user.username,
-    };
-
-    const { access_token } = await this.generateAccessToken(
-      response,
-      userPayload,
-    );
-
-    const { refresh_token } = await this.generateRefreshToken(
-      userPayload,
-      user,
-      response,
-    );
-
     return {
-      access_token,
-      refresh_token,
+      UserExist: isUserExist ?? false,
     };
   }
 
@@ -190,5 +158,72 @@ export class AuthService {
     // Update the user's password
     user.password = hashedPassword;
     await this.userRepository.update(id, user);
+  }
+
+  async createUser(payload, response: Response) {
+    const user: Users = await this.usersService.create({
+      ...payload,
+    });
+
+    const userPayload: TokenPayload = {
+      sub: user.id,
+      email: user.email,
+      username: user.username,
+    };
+
+    const { access_token, refresh_token } = await this.generateTokenForUser(
+      response,
+      userPayload,
+      user,
+    );
+    return {
+      access_token,
+      refresh_token,
+    };
+  }
+
+  async generateTokenForUser(response, userPayload, user) {
+    const { access_token } = await this.generateAccessToken(
+      response,
+      userPayload,
+    );
+
+    const { refresh_token } = await this.generateRefreshToken(
+      userPayload,
+      user,
+      response,
+    );
+
+    return {
+      access_token: access_token,
+      refresh_token: refresh_token,
+    };
+  }
+
+  async googleLogin(user: any) {
+    let existingUser = await this.userRepository.findOne({
+      where: { email: user.email },
+    });
+
+    if (!existingUser) {
+      // Create new user record
+      existingUser = this.userRepository.create({
+        email: user.email,
+        username: user.firstName,
+        auth_provider: AuthProvider.GOOGLE,
+        is_verified: true,
+
+        // last_name: user.lastName,
+        // profile_picture: user.picture,
+      });
+      await this.userRepository.save(existingUser);
+    }
+
+    const payload = { email: existingUser.email, sub: existingUser.id };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: existingUser,
+    };
   }
 }
