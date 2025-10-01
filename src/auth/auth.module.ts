@@ -45,10 +45,10 @@ import { GoogleStrategy } from './strategies/google.strategy';
     TwilioService,
     AuthHelperService,
     GoogleStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
     {
       provide: OtpService,
       useClass: OtpService,
