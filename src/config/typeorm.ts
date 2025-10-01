@@ -19,7 +19,7 @@ const config = {
   },
   autoLoadEntities: true,
   synchronize: false,
-  schema: 'main',
+  schema: 'public',
   migrationsRun: false,
   logging: true,
 };
