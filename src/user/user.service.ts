@@ -19,6 +19,7 @@ export class UserService {
 
       const record = this.userRepository.create({
         ...rest,
+        role_id: process.env.SUBSCRIBER,
         password: hashPassword,
       });
       record.created_on = Math.floor(Date.now() / 1000);
