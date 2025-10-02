@@ -41,6 +41,8 @@ export class OtpService {
     if (!storedOtp) {
       throw new BadRequestException('No OTP found for this number');
     }
+
+    console.log(storedOtp, otp)
     if (storedOtp !== otp) {
       throw new BadRequestException('Invalid OTP');
     }
