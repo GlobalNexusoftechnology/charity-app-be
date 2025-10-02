@@ -14,13 +14,13 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const { password, ...rest } = createUserDto;
-      const hashPassword = await bcrypt.hash(password, 10);
+      // const { password, ...rest } = createUserDto;
+      // const hashPassword = await bcrypt.hash(password, 10);
 
       const record = this.userRepository.create({
-        ...rest,
+        ...createUserDto,
         role_id: process.env.SUBSCRIBER,
-        password: hashPassword,
+        // password: hashPassword,
       });
       record.created_on = Math.floor(Date.now() / 1000);
       return await this.userRepository.save(record);
