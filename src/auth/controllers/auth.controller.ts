@@ -43,7 +43,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   // @RateLimit({
   //   points: 5,
   //   duration: 60,
