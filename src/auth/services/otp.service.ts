@@ -34,7 +34,7 @@ export class OtpService {
     return { message: 'OTP sent successfully' };
   }
 
-  verifyOtp(dto: VerifyOtpDto & CreateUserDto, response: Response) {
+  async verifyOtp(dto: VerifyOtpDto & CreateUserDto, response: Response) {
     const { phone_number, type, otp, username } = dto;
 
     const storedOtp = this.otpStore.get(phone_number);
@@ -57,9 +57,11 @@ export class OtpService {
 
     // after verification create user;
     if (type === 'signup') {
-      this.authService.createUser(payload, response);
+      const { access_token, refresh_token } = await this.authService.createUser(payload, response);
+    return { access_token, refresh_token };
+      // this.authService.createUser(payload, response);
     } else {
-      const user: any = this.usersService.findOne(phone_number);
+      const user: any = await this.usersService.findOne(phone_number);
 
       const userPayload: TokenPayload = {
         sub: user.id,
@@ -67,7 +69,9 @@ export class OtpService {
         username: user.username,
       };
 
-      this.authService.generateTokenForUser(response, userPayload, user);
+       const { access_token, refresh_token } = await this.authService.generateTokenForUser(response, userPayload, user);
+    return { access_token, refresh_token };
+      // this.authService.generateTokenForUser(response, userPayload, user);
     }
   }
 }
