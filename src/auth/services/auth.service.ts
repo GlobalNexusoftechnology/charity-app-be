@@ -66,7 +66,9 @@ export class AuthService {
   //   }
   // }
 
-  async signUp(signUpDto: CreateUserDto) {
+  async signUp(signUpDto: {
+        phone_number: string
+      }, response) {
     const isUserExist = await this.usersService.findOne(signUpDto.phone_number);
 
     if (isUserExist) {

@@ -83,9 +83,11 @@ export class AuthController {
     status: 200,
     description: 'SignUp Successfully',
   })
-  async signUp(@Body() signUpDto: CreateUserDto) {
+  async signUp(@Body() signUpDto: {
+    phone_number: string
+  }, @Res({ passthrough: true }) response: Response) {
     try {
-      return this.authService.signUp(signUpDto);
+      return this.authService.signUp(signUpDto, response);
     } catch (error) {
       console.error('Error during sign-up:', error);
       throw error;
