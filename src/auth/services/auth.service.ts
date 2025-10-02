@@ -97,13 +97,13 @@ export class AuthService {
       )}ms`,
     });
 
-    response.cookie('access_token', access_token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'none',
-      expires: expiresAccessToken,
-      path: '/', // Ensure path is correct
-    });
+    // response.cookie('access_token', access_token, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: 'none',
+    //   expires: expiresAccessToken,
+    //   path: '/', // Ensure path is correct
+    // });
 
     return {
       access_token,
@@ -138,13 +138,13 @@ export class AuthService {
       refresh_token: hashedRefreshToken,
     });
 
-    response.cookie('refresh_token', refresh_token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'none',
-      expires: expiresRefreshoken,
-      path: '/', // Ensure path is correct
-    });
+    // response.cookie('refresh_token', refresh_token, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: 'none',
+    //   expires: expiresRefreshoken,
+    //   path: '/', // Ensure path is correct
+    // });
 
     return { refresh_token };
   }
