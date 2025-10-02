@@ -7,11 +7,11 @@ import { AuthHelperService } from '../services/auth-helper.service';
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authHelperService: AuthHelperService) {
     super({
-      usernameField: 'email',
+      usernameField: 'phone_number',
     });
   }
 
-  async validate(email: string, password: string) {
-    return this.authHelperService.validateUser(email, password);
+  async validate(phone_number: string) {
+    return this.authHelperService.validateUser(phone_number);
   }
 }

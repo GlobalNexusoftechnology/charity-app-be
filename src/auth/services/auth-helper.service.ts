@@ -23,20 +23,20 @@ export class AuthHelperService {
     }
   }
 
-  async validateUser(userEmail: string, userPassword: string) {
-    const user = await this.userRepository.findOneBy({ email: userEmail });
+  async validateUser(phone_number: string) {
+    const user = await this.userRepository.findOneBy({ phone_number: phone_number });
 
     if (!user) {
       throw new UnauthorizedException('Invalid Credentials');
     }
 
-    const isPasswordMatch = await bcrypt.compare(userPassword, user.password);
+    // const isPasswordMatch = await bcrypt.compare(userPassword, user.password);
 
-    console.log(isPasswordMatch, 'user', user);
+    // console.log(isPasswordMatch, 'user', user);
 
-    if (!isPasswordMatch) {
-      throw new UnauthorizedException('Invalid Credentials');
-    }
+    // if (!isPasswordMatch) {
+    //   throw new UnauthorizedException('Invalid Credentials');
+    // }
     return user;
   }
 
