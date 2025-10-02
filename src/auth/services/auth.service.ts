@@ -38,6 +38,7 @@ export class AuthService {
     }
 
     const isUserExist = await this.usersService.findOne(signInDto.phone_number);
+console.log("isUserExist",isUserExist);
 
     if (isUserExist) {
       await this.otpService.sendOtp(signInDto.phone_number);
