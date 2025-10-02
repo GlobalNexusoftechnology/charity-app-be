@@ -14,7 +14,7 @@ import { TwilioService } from './twilio.service';
 
 @Injectable()
 export class OtpService {
-  private otpStore: Map<string, string> = new Map(); // phone -> otp
+  private otpStore: Map<string, string> = new Map();
 
   constructor(
     private readonly twilioService: TwilioService,

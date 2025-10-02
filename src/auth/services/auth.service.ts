@@ -26,27 +26,40 @@ export class AuthService {
     private otpService: OtpService,
   ) {}
 
-  async signIn(response: Response, user: Users, redirect: boolean = false) {
-    const payload: TokenPayload = {
-      sub: user.id,
-      email: user.email,
-      username: user.username,
-    };
-
-    const { access_token } = await this.generateAccessToken(response, payload);
-    const { refresh_token } = await this.generateRefreshToken(
-      payload,
-      user,
-      response,
-    );
-
+  async signIn(
+    response: Response,
+    signInDto: {
+      phone_number: string;
+    },
+    redirect: boolean = false,
+  ) {
     if (redirect) {
       response.redirect(this.configService.getOrThrow('AUTH_UI_REDIRECT'));
     }
-    return {
-      access_token,
-      refresh_token,
-    };
+
+    const isUserExist = await this.usersService.findOne(signInDto.phone_number);
+
+    if (isUserExist) {
+      this.otpService.sendOtp(signInDto.phone_number).then(() => {
+        return {
+          message: 'An Otp has been sent',
+        };
+      });
+    } else {
+      throw new BadRequestException('User does not exist');
+    }
+    // const payload: TokenPayload = {
+    //   sub: user.id,
+    //   email: user.email,
+    //   username: user.username,
+    // };
+
+    // const { access_token } = await this.generateAccessToken(response, payload);
+    // const { refresh_token } = await this.generateRefreshToken(
+    //   payload,
+    //   user,
+    //   response,
+    // );
   }
 
   // async authMe() {
@@ -66,9 +79,12 @@ export class AuthService {
   //   }
   // }
 
-  async signUp(signUpDto: {
-        phone_number: string
-      }, response) {
+  async signUp(
+    signUpDto: {
+      phone_number: string;
+    },
+    response,
+  ) {
     const isUserExist = await this.usersService.findOne(signUpDto.phone_number);
 
     if (isUserExist) {

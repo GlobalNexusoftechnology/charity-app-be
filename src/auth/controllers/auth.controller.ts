@@ -55,14 +55,15 @@ export class AuthController {
   })
   async signIn(
     @CurrentUser() user: Users,
-    @Body() signInDto: SignInDto,
+    @Body() signInDto: {
+      phone_number: string
+    },
     @Res({ passthrough: true }) response: Response,
   ) {
     try {
-      const result = await this.authService.signIn(response, user);
+      const result = await this.authService.signIn(response, signInDto);
       return {
-        access_token: result.access_token,
-        refresh_token: result.refresh_token,
+        result
       };
     } catch (error) {
       console.log('Error: for fn signIn', error);
@@ -129,30 +130,28 @@ export class AuthController {
     };
   }
 
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('refresh-token')
-  @UseGuards(JwtRefreshAuthGuard)
-  @ApiOperation({ summary: 'Refresh token' })
-  @ApiResponse({
-    status: 200,
-    description: 'token refreshed successfully',
-  })
-  async refresh(
-    @CurrentUser() user: Users,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    try {
-      const result = await this.authService.signIn(response, user);
-      return {
-        access_token: result.access_token,
-        refresh_token: result.refresh_token,
-      };
-    } catch (error) {
-      console.log('Error: for fn signIn', error);
-      throw error ?? 'Error Plz try again';
-    }
-  }
+  // @Public()
+  // @HttpCode(HttpStatus.OK)
+  // @Post('refresh-token')
+  // @UseGuards(JwtRefreshAuthGuard)
+  // @ApiOperation({ summary: 'Refresh token' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'token refreshed successfully',
+  // })
+  // async refresh(
+  //   @CurrentUser() user: Users,
+  //   @Res({ passthrough: true }) response: Response,
+  // ) {
+  //   try {
+  //     const result = await this.authService.signIn(response, user);
+  //     return {
+  //       msg "TEST"};
+  //   } catch (error) {
+  //     console.log('Error: for fn signIn', error);
+  //     throw error ?? 'Error Plz try again';
+  //   }
+  // }
 
   @Get('google')
   @UseGuards(GoogleAuthGuard)
