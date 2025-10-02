@@ -40,14 +40,20 @@ export class AuthService {
     const isUserExist = await this.usersService.findOne(signInDto.phone_number);
 
     if (isUserExist) {
-      this.otpService.sendOtp(signInDto.phone_number).then(() => {
-        return {
-          message: 'An Otp has been sent',
-        };
-      });
+      await this.otpService.sendOtp(signInDto.phone_number);
+      return { message: 'OTP has been sent' };
     } else {
       throw new BadRequestException('User does not exist');
     }
+    // if (isUserExist) {
+    //   this.otpService.sendOtp(signInDto.phone_number).then(() => {
+    //     return {
+    //       message: 'An Otp has been sent',
+    //     };
+    //   });
+    // } else {
+    //   throw new BadRequestException('User does not exist');
+    // }
     // const payload: TokenPayload = {
     //   sub: user.id,
     //   email: user.email,

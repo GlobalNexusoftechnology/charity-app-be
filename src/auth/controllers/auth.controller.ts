@@ -54,7 +54,7 @@ export class AuthController {
     description: 'Login Successfully',
   })
   async signIn(
-    @CurrentUser() user: Users,
+    // @CurrentUser() user: Users,
     @Body() signInDto: {
       phone_number: string
     },
