@@ -202,6 +202,7 @@ console.log("isUserExist",isUserExist);
       user,
     );
     return {
+      user,
       access_token,
       refresh_token,
     };
@@ -222,6 +223,7 @@ console.log("isUserExist",isUserExist);
     return {
       access_token: access_token,
       refresh_token: refresh_token,
+      user
     };
   }
 

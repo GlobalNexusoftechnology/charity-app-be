@@ -42,7 +42,7 @@ export class OtpService {
       throw new BadRequestException('No OTP found for this number');
     }
 
-    console.log(storedOtp, otp)
+    console.log(storedOtp, otp);
     if (storedOtp !== otp) {
       throw new BadRequestException('Invalid OTP');
     }
@@ -57,8 +57,11 @@ export class OtpService {
 
     // after verification create user;
     if (type === 'signup') {
-      const { access_token, refresh_token } = await this.authService.createUser(payload, response);
-    return { access_token, refresh_token };
+      const { access_token, user } = await this.authService.createUser(
+        payload,
+        response,
+      );
+      return { access_token, user };
       // this.authService.createUser(payload, response);
     } else {
       const user: any = await this.usersService.findOne(phone_number);
@@ -69,8 +72,13 @@ export class OtpService {
         username: user.username,
       };
 
-       const { access_token, refresh_token } = await this.authService.generateTokenForUser(response, userPayload, user);
-    return { access_token, refresh_token };
+      const { access_token, refresh_token } =
+        await this.authService.generateTokenForUser(
+          response,
+          userPayload,
+          user,
+        );
+      return { access_token, refresh_token, user };
       // this.authService.generateTokenForUser(response, userPayload, user);
     }
   }

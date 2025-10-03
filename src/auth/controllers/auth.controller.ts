@@ -31,6 +31,7 @@ import { VerifyOtpDto } from '../dto/verify-otp.dto';
 import { SendOtpDto } from '../dto/send-otp.dto';
 import { OtpService } from '../services/otp.service';
 import { AuthGuard } from '@nestjs/passport';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 @ApiTags('Auth Controller')
@@ -38,6 +39,7 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private otpService: OtpService,
+    private userService: UserService,
   ) {}
 
   @Public()
@@ -195,6 +197,8 @@ export class AuthController {
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
   getProfile(@Req() req) {
-    return req.user;
+    // return req.user;
+    return this.userService.findOne(req.user.phone_number);
+
   }
 }
