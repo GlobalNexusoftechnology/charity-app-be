@@ -70,7 +70,6 @@ export class OtpService {
         sub: user.id,
         email: user.email,
         username: user.username,
-        phone_number: user.phone_number,
       };
 
       const {
