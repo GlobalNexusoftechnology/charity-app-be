@@ -70,15 +70,21 @@ export class OtpService {
         sub: user.id,
         email: user.email,
         username: user.username,
+        phone_number: user.phone_number,
       };
 
-      const { access_token, refresh_token } =
-        await this.authService.generateTokenForUser(
-          response,
-          userPayload,
-          user,
-        );
-      return { access_token, refresh_token, user };
+      const {
+        access_token,
+        refresh_token,
+        user: tokenUser,
+      } = await this.authService.generateTokenForUser(
+        response,
+        userPayload,
+        user,
+      );
+
+      return { access_token, refresh_token, user: tokenUser };
+
       // this.authService.generateTokenForUser(response, userPayload, user);
     }
   }
