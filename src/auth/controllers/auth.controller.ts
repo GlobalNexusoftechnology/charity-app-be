@@ -57,15 +57,16 @@ export class AuthController {
   })
   async signIn(
     // @CurrentUser() user: Users,
-    @Body() signInDto: {
-      phone_number: string
+    @Body()
+    signInDto: {
+      phone_number: string;
     },
     @Res({ passthrough: true }) response: Response,
   ) {
     try {
       const result = await this.authService.signIn(response, signInDto);
       return {
-        result
+        result,
       };
     } catch (error) {
       console.log('Error: for fn signIn', error);
@@ -86,9 +87,13 @@ export class AuthController {
     status: 200,
     description: 'SignUp Successfully',
   })
-  async signUp(@Body() signUpDto: {
-    phone_number: string
-  }, @Res({ passthrough: true }) response: Response) {
+  async signUp(
+    @Body()
+    signUpDto: {
+      phone_number: string;
+    },
+    @Res({ passthrough: true }) response: Response,
+  ) {
     try {
       return this.authService.signUp(signUpDto, response);
     } catch (error) {
@@ -199,6 +204,5 @@ export class AuthController {
   getProfile(@Req() req) {
     // return req.user;
     return this.userService.findOne(req.user.phone_number);
-
   }
 }

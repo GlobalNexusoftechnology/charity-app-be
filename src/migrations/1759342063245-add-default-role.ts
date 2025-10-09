@@ -1,8 +1,7 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class  AddDefaultRole1759342063245 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
+export class AddDefaultRole1759342063245 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<void> {
     // Insert default roles
     await queryRunner.query(`
       INSERT INTO roles (id, name, permissions, created_on, deleted)
@@ -15,5 +14,4 @@ export class  AddDefaultRole1759342063245 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('roles');
   }
-
 }

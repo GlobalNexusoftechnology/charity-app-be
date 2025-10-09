@@ -35,22 +35,23 @@ export class PaymentController {
     return await this.paymentService.getDonations();
   }
 
- @Post('create-subscription')
-async createSubscription(@Body() createSubscriptionDto: CreateSubscriptionDto) {
-  return await this.paymentService.createSubscription(createSubscriptionDto);
-}
+  @Post('create-subscription')
+  async createSubscription(
+    @Body() createSubscriptionDto: CreateSubscriptionDto,
+  ) {
+    return await this.paymentService.createSubscription(createSubscriptionDto);
+  }
 
-@Post('verify-subscription')
-async verifySubscription(@Body() body: any) {
-  return await this.paymentService.verifyAndSaveSubscription(
-    body.razorpay_payment_id,
-    body.razorpay_subscription_id,
-    body.razorpay_signature,
-    body.user_id,
-    body.amount,
-    body.period,
-    body.interval,
-  );
-}
-
+  @Post('verify-subscription')
+  async verifySubscription(@Body() body: any) {
+    return await this.paymentService.verifyAndSaveSubscription(
+      body.razorpay_payment_id,
+      body.razorpay_subscription_id,
+      body.razorpay_signature,
+      body.user_id,
+      body.amount,
+      body.period,
+      body.interval,
+    );
+  }
 }

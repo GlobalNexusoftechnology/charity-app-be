@@ -29,7 +29,7 @@ export class AuthHelperService {
     if (!user) {
       throw new UnauthorizedException('Invalid Credentials');
     }
-    
+
     return user;
   }
 
