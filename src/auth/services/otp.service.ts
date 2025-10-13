@@ -4,7 +4,6 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { UserService } from 'src/user/user.service';
 import { AuthProvider, CreateUserDto } from '../dto/create-user.dto';
 import { VerifyOtpDto } from '../dto/verify-otp.dto';
@@ -34,7 +33,7 @@ export class OtpService {
     return { message: 'OTP sent successfully' };
   }
 
-  async verifyOtp(dto: VerifyOtpDto & CreateUserDto, response: Response) {
+  async verifyOtp(dto: VerifyOtpDto & CreateUserDto) {
     const { phone_number, type, otp, username } = dto;
 
     const storedOtp = this.otpStore.get(phone_number);
@@ -57,10 +56,7 @@ export class OtpService {
 
     // after verification create user;
     if (type === 'signup') {
-      const { access_token, user } = await this.authService.createUser(
-        payload,
-        response,
-      );
+      const { access_token, user } = await this.authService.createUser(payload);
       return { access_token, user };
       // this.authService.createUser(payload, response);
     } else {
@@ -76,11 +72,7 @@ export class OtpService {
         access_token,
         refresh_token,
         user: tokenUser,
-      } = await this.authService.generateTokenForUser(
-        response,
-        userPayload,
-        user,
-      );
+      } = await this.authService.generateTokenForUser(userPayload, user);
 
       return { access_token, refresh_token, user: tokenUser };
 

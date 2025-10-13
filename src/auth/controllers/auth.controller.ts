@@ -9,6 +9,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -19,19 +20,14 @@ import { Response } from 'express';
 import { RateLimit, RateLimiterGuard } from 'nestjs-rate-limiter';
 import { Public } from 'src/public-strategy';
 import { Users } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 import { CurrentUser } from '../decorators/current-user-decorator';
-import { SignInDto } from '../dto/sign-in-dto';
+import { SendOtpDto } from '../dto/send-otp.dto';
+import { VerifyUserDto } from '../dto/verify-user.dto';
 import { GoogleAuthGuard } from '../guards/google-auth.guard';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { JwtRefreshAuthGuard } from '../guards/jwt-refresh-auth.guard';
-import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { AuthService } from '../services/auth.service';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { VerifyOtpDto } from '../dto/verify-otp.dto';
-import { SendOtpDto } from '../dto/send-otp.dto';
 import { OtpService } from '../services/otp.service';
-import { AuthGuard } from '@nestjs/passport';
-import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 @ApiTags('Auth Controller')
@@ -92,10 +88,9 @@ export class AuthController {
     signUpDto: {
       phone_number: string;
     },
-    @Res({ passthrough: true }) response: Response,
   ) {
     try {
-      return this.authService.signUp(signUpDto, response);
+      return this.authService.signUp(signUpDto);
     } catch (error) {
       console.error('Error during sign-up:', error);
       throw error;
@@ -191,11 +186,8 @@ export class AuthController {
 
   @Public()
   @Post('verify-otp')
-  async verifyOtp(
-    @Body() dto: VerifyOtpDto & CreateUserDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return this.otpService.verifyOtp(dto, response);
+  async verifyOtp(@Body() dto: VerifyUserDto) {
+    return this.otpService.verifyOtp(dto);
   }
 
   // Example of a protected route

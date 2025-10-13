@@ -11,7 +11,6 @@ import { Response } from 'express';
 import { AuthProvider, Users } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { TokenPayload } from '../types/types';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import { OtpService } from './otp.service';
 
@@ -86,12 +85,7 @@ export class AuthService {
   //   }
   // }
 
-  async signUp(
-    signUpDto: {
-      phone_number: string;
-    },
-    response,
-  ) {
+  async signUp(signUpDto: { phone_number: string }) {
     const isUserExist = await this.usersService.findOne(signUpDto.phone_number);
 
     if (isUserExist) {
@@ -102,7 +96,7 @@ export class AuthService {
     };
   }
 
-  async generateAccessToken(response: Response, payload: TokenPayload) {
+  async generateAccessToken(payload: TokenPayload) {
     const expiresAccessToken = new Date();
     expiresAccessToken.setMilliseconds(
       expiresAccessToken.getTime() +
@@ -133,11 +127,7 @@ export class AuthService {
     };
   }
 
-  async generateRefreshToken(
-    payload: TokenPayload,
-    user: Users,
-    response: Response,
-  ) {
+  async generateRefreshToken(payload: TokenPayload, user: Users) {
     // refresh token
     const expiresRefreshoken = new Date();
     expiresRefreshoken.setMilliseconds(
@@ -185,7 +175,7 @@ export class AuthService {
     await this.userRepository.update(id, user);
   }
 
-  async createUser(payload, response: Response) {
+  async createUser(payload) {
     const user: Users = await this.usersService.create({
       ...payload,
     });
@@ -197,7 +187,6 @@ export class AuthService {
     };
 
     const { access_token, refresh_token } = await this.generateTokenForUser(
-      response,
       userPayload,
       user,
     );
@@ -208,16 +197,12 @@ export class AuthService {
     };
   }
 
-  async generateTokenForUser(response, userPayload, user) {
-    const { access_token } = await this.generateAccessToken(
-      response,
-      userPayload,
-    );
+  async generateTokenForUser(userPayload, user) {
+    const { access_token } = await this.generateAccessToken(userPayload);
 
     const { refresh_token } = await this.generateRefreshToken(
       userPayload,
       user,
-      response,
     );
 
     return {
