@@ -44,39 +44,41 @@ export class OtpService {
     console.log(storedOtp, otp);
     if (storedOtp != otp) {
       throw new BadRequestException('Invalid OTP');
-    }
-    this.otpStore.delete(phone_number);
-
-    const payload = {
-      phone_number,
-      username,
-      auth_provider: AuthProvider.PHONE,
-      isVerified: true,
-    };
-
-    // after verification create user;
-    if (type === 'signup') {
-      const { access_token, user } = await this.authService.createUser(payload);
-      return { access_token, user };
-      // this.authService.createUser(payload, response);
     } else {
-      const user: any = await this.usersService.findOne(phone_number);
+      this.otpStore.delete(phone_number);
 
-      const userPayload: TokenPayload = {
-        sub: user.id,
-        email: user.email,
-        username: user.username,
+      const payload = {
+        phone_number,
+        username,
+        auth_provider: AuthProvider.PHONE,
+        isVerified: true,
       };
 
-      const {
-        access_token,
-        refresh_token,
-        user: tokenUser,
-      } = await this.authService.generateTokenForUser(userPayload, user);
+      // after verification create user;
+      if (type === 'signup') {
+        const { access_token, user } =
+          await this.authService.createUser(payload);
+        return { access_token, user };
+        // this.authService.createUser(payload, response);
+      } else {
+        const user: any = await this.usersService.findOne(phone_number);
 
-      return { access_token, refresh_token, user: tokenUser };
+        const userPayload: TokenPayload = {
+          sub: user.id,
+          email: user.email,
+          username: user.username,
+        };
 
-      // this.authService.generateTokenForUser(response, userPayload, user);
+        const {
+          access_token,
+          refresh_token,
+          user: tokenUser,
+        } = await this.authService.generateTokenForUser(userPayload, user);
+
+        return { access_token, refresh_token, user: tokenUser };
+
+        // this.authService.generateTokenForUser(response, userPayload, user);
+      }
     }
   }
 }
