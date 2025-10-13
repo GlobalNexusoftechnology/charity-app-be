@@ -42,7 +42,7 @@ export class OtpService {
     }
 
     console.log(storedOtp, otp);
-    if (storedOtp !== otp) {
+    if (storedOtp != otp) {
       throw new BadRequestException('Invalid OTP');
     }
     this.otpStore.delete(phone_number);
