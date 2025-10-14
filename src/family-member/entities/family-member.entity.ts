@@ -1,21 +1,21 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('family_member')
 export class FamilyMember {
-  @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
+  @ApiProperty()
   id: string;
 
-  @ApiProperty()
   @Column()
+  @ApiProperty()
   userId: string;
 
-  @ApiProperty()
   @Column()
+  @ApiProperty()
   name: string;
 
-  @ApiProperty()
   @Column()
+  @ApiProperty()
   relation: string;
 }

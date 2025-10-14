@@ -11,16 +11,29 @@ export class FamilyMemberService {
     private repo: Repository<FamilyMember>,
   ) {}
 
-  addMember(dto: CreateFamilyMemberDto) {
+  async addMember(dto: CreateFamilyMemberDto) {
+    console.log('🔍 Adding member:', dto);
+
     const member = this.repo.create(dto);
-    return this.repo.save(member);
+    console.log('📝 Created entity:', member);
+
+    const saved = await this.repo.save(member);
+    console.log('💾 Saved result:', saved);
+
+    return saved;
   }
 
-  listMembers(userId: string) {
-    return this.repo.find({ where: { userId } });
+  async listMembers(userId: string) {
+    console.log('📋 Listing members for userId:', userId);
+
+    const members = await this.repo.find({ where: { userId } });
+    console.log('📊 Found members:', members);
+
+    return members;
   }
 
-  deleteMember(id: string) {
+  async deleteMember(id: string) {
+    console.log('🗑️ Deleting member:', id);
     return this.repo.delete(id);
   }
 }
