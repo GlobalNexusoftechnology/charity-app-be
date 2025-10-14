@@ -63,12 +63,12 @@ export class OtpService {
       };
 
       if (type === 'signup') {
-        const { access_token, user } =
+        const { access_token, user, refresh_token } =
           await this.authService.createUser(payload);
         console.log(
           `User created with phone ${phone_number}, userId: ${user.id}`,
         );
-        return { access_token, user };
+        return { access_token, refresh_token, user };
       } else {
         const user: any = await this.usersService.findOne(phone_number);
         if (!user) {
