@@ -5,8 +5,8 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { AuthProvider, CreateUserDto } from '../dto/create-user.dto';
-import { VerifyOtpDto } from '../dto/verify-otp.dto';
+import { AuthProvider } from '../dto/create-user.dto';
+import { VerifyUserDto } from '../dto/verify-user.dto';
 import { TokenPayload } from '../types/types';
 import { AuthService } from './auth.service';
 import { TwilioService } from './twilio.service';
@@ -33,19 +33,27 @@ export class OtpService {
     return { message: 'OTP sent successfully' };
   }
 
-  async verifyOtp(dto: VerifyOtpDto & CreateUserDto) {
+  async verifyOtp(dto: VerifyUserDto) {
     const { phone_number, type, otp, username } = dto;
 
     const storedOtp = this.otpStore.get(phone_number);
+
+    console.log(`Verifying OTP for phone: ${phone_number}`);
+    console.log(`OTP entered: ${otp}, OTP stored: ${storedOtp}`);
+
     if (!storedOtp) {
+      console.error(`No OTP found in store for ${phone_number}`);
       throw new BadRequestException('No OTP found for this number');
     }
 
-    console.log(storedOtp, otp);
-    if (storedOtp != otp) {
+    if (storedOtp !== otp) {
+      console.error(
+        `OTP mismatch for ${phone_number}: entered ${otp}, expected ${storedOtp}`,
+      );
       throw new BadRequestException('Invalid OTP');
     } else {
       this.otpStore.delete(phone_number);
+      console.log(`OTP verified successfully for ${phone_number}`);
 
       const payload = {
         phone_number,
@@ -54,14 +62,19 @@ export class OtpService {
         isVerified: true,
       };
 
-      // after verification create user;
       if (type === 'signup') {
         const { access_token, user } =
           await this.authService.createUser(payload);
+        console.log(
+          `User created with phone ${phone_number}, userId: ${user.id}`,
+        );
         return { access_token, user };
-        // this.authService.createUser(payload, response);
       } else {
         const user: any = await this.usersService.findOne(phone_number);
+        if (!user) {
+          console.error(`User not found in DB for phone: ${phone_number}`);
+          throw new BadRequestException('User not found');
+        }
 
         const userPayload: TokenPayload = {
           sub: user.id,
@@ -75,9 +88,9 @@ export class OtpService {
           user: tokenUser,
         } = await this.authService.generateTokenForUser(userPayload, user);
 
-        return { access_token, refresh_token, user: tokenUser };
+        console.log(`Login successful for userId: ${user.id}`);
 
-        // this.authService.generateTokenForUser(response, userPayload, user);
+        return { access_token, refresh_token, user: tokenUser };
       }
     }
   }

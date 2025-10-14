@@ -22,7 +22,7 @@ export class VerifyUserDto {
   @IsNotEmpty()
   otp: string;
 
-  @ApiProperty({ example: '123456', description: 'OTP received on phone' })
+  @ApiProperty({ example: 'signup', description: 'OTP received on phone' })
   @IsString()
   @IsNotEmpty()
   type: 'signup' | 'signin';
