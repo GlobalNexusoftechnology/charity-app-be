@@ -11,10 +11,10 @@ import { PdfService } from './pdf/pdf.service';
 import { PdfController } from './pdf/pdf.controller';
 import { ExcelController } from './excel/excel.controller';
 import { ExcelService } from './excel/excel.service';
-import { NotificationModule } from './notification/notification.module';
 import { PaymentModule } from './payment/payment.module';
 import { FamilyMemberModule } from './family-member/family-member.module';
 import { UpdatesModule } from './updates/updates.module';
+import { NotificationsModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { UpdatesModule } from './updates/updates.module';
     RolesModule,
     UserModule,
     AuthModule,
-    NotificationModule,
+    NotificationsModule,
     PaymentModule,
     FamilyMemberModule,
     UpdatesModule,
