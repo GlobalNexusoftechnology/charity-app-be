@@ -14,6 +14,7 @@ import { ExcelService } from './excel/excel.service';
 import { NotificationModule } from './notification/notification.module';
 import { PaymentModule } from './payment/payment.module';
 import { FamilyMemberModule } from './family-member/family-member.module';
+import { UpdatesModule } from './updates/updates.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { FamilyMemberModule } from './family-member/family-member.module';
     NotificationModule,
     PaymentModule,
     FamilyMemberModule,
+    UpdatesModule,
   ],
   controllers: [AppController, PdfController, ExcelController],
   providers: [AppService, PdfService, ExcelService],
