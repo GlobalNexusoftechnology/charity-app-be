@@ -10,12 +10,25 @@ export class PaymentController {
 
   @Post('create-order')
   async createOrder(@Body() createOrderDto: CreateOrderDto) {
-    const { amount, donor_name, donor_email, donor_contact } = createOrderDto;
+    const {
+      amount,
+      donor_name,
+      donor_email,
+      donor_contact,
+      donation_type,
+      donation_for,
+      frequency,
+      user_id,
+    } = createOrderDto;
     return await this.paymentService.createOrder(
       amount,
       donor_name,
       donor_email,
       donor_contact,
+      donation_type,
+      donation_for,
+      frequency,
+      user_id,
     );
   }
 

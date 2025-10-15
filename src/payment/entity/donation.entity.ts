@@ -40,6 +40,19 @@ export class Donations {
   @Column({ nullable: true })
   razorpay_signature: string;
 
+  @Column({ length: 50, default: 'Donation' })
+  donation_type: string;
+
+  @Column({ length: 100, nullable: true })
+  donation_for?: string;
+
+  @Column({
+    type: 'enum',
+    enum: ['One-Time', 'Recurring'],
+    default: 'One-Time',
+  })
+  frequency: 'One-Time' | 'Recurring';
+
   @CreateDateColumn()
   created_at: Date;
 

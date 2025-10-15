@@ -30,7 +30,10 @@ export class PaymentService {
     donor_name: string,
     donor_email: string,
     donor_contact: string,
-    user_id?: 12,
+    donation_type: string,
+    donation_for: string,
+    frequency: 'One-Time' | 'Recurring',
+    user_id?: string,
   ) {
     try {
       const options = {
@@ -45,9 +48,13 @@ export class PaymentService {
         donor_name,
         donor_email,
         donor_contact,
-        amount: amount,
+        amount,
         currency: 'INR',
         razorpay_order_id: order.id,
+        donation_type,
+        donation_for,
+        frequency,
+        user_id,
       });
 
       await this.donationRepository.save(donation);
