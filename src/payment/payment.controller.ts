@@ -13,12 +13,12 @@ export class PaymentController {
     const {
       amount,
       donor_name,
-      donor_email,
       donor_contact,
       donation_type,
       donation_for,
       frequency,
       user_id,
+      donor_email,
     } = createOrderDto;
     return await this.paymentService.createOrder(
       amount,

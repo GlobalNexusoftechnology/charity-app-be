@@ -46,7 +46,6 @@ export class PaymentService {
 
       const donation = this.donationRepository.create({
         donor_name,
-        donor_email,
         donor_contact,
         amount,
         currency: 'INR',
@@ -55,6 +54,7 @@ export class PaymentService {
         donation_for,
         frequency,
         user_id,
+        donor_email,
       });
 
       await this.donationRepository.save(donation);
