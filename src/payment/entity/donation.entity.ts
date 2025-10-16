@@ -16,8 +16,8 @@ export class Donations {
   @Column({ length: 100 })
   donor_name: string;
 
-  @Column({ length: 100 })
-  donor_email: string;
+  @Column({ length: 100, nullable: true })
+  donor_email?: string;
 
   @Column({ length: 15 })
   donor_contact: string;
