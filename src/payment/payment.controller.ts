@@ -65,6 +65,10 @@ export class PaymentController {
       body.amount,
       body.period,
       body.interval,
+      body.donor_name,
+      body.donor_contact,
+      body.donation_type,
+      body.donation_for,
     );
   }
 }

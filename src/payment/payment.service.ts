@@ -157,6 +157,10 @@ export class PaymentService {
     amount: number,
     period: string,
     interval: number,
+    donor_name?: string,
+    donor_contact?: string,
+    donation_type?: string,
+    donation_for?: string,
   ) {
     const sign = razorpay_payment_id + '|' + razorpay_subscription_id;
     const expectedSign = crypto
@@ -185,6 +189,26 @@ export class PaymentService {
     });
 
     await this.subscriptionRepository.save(newSub);
-    return { status: 'success', message: 'Subscription verified and saved' };
+
+    const donation = this.donationRepository.create({
+      donor_name: donor_name || 'Guest',
+      donor_contact: donor_contact || '0000000000',
+      amount,
+      currency: 'INR',
+      razorpay_payment_id,
+      razorpay_order_id: razorpay_subscription_id,
+      razorpay_signature,
+      donation_type: donation_type || 'Subscription',
+      donation_for: donation_for || 'Self',
+      frequency: 'Recurring',
+      user_id,
+    });
+
+    await this.donationRepository.save(donation);
+
+    return {
+      status: 'success',
+      message: 'Subscription verified and first payment saved',
+    };
   }
 }
