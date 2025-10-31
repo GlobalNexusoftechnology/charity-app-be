@@ -29,7 +29,6 @@ export class AuthService {
     response: Response,
     signInDto: {
       phone_number: string;
-      type: 'login' | 'signup';
     },
     redirect: boolean = false,
   ) {
@@ -41,7 +40,7 @@ export class AuthService {
     console.log('isUserExist', isUserExist);
 
     if (isUserExist) {
-      await this.otpService.sendOtp(signInDto.phone_number, signInDto.type);
+      await this.otpService.sendOtp(signInDto.phone_number);
       return { message: 'OTP has been sent' };
     } else {
       throw new BadRequestException('User does not exist');

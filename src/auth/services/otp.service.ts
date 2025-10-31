@@ -37,7 +37,7 @@ export class OtpService {
   //   return { message: 'OTP sent successfully' };
   // }
 
-  async sendOtp(phone: string, type: 'login' | 'signup'): Promise<any> {
+  async sendOtp(phone: string): Promise<any> {
     const otp = this.generateOtp();
     try {
       const url = `https://bhashsms.com/api/sendmsg.php`;
@@ -46,13 +46,7 @@ export class OtpService {
         pass: '123456',
         sender: 'IICFON',
         phone: phone,
-        text:
-          type === 'login'
-            ? `Your IICF login OTP is ${otp}. Enter this code to access your account. It will expire in 10 minutes. - Team INDO ISLAMIC CULTURAL FOUNDATION`
-            : `Welcome to IICF!
-Your verification code is ${otp}. Please use this OTP to complete your registration.
-This code will expire in 10 minutes.
-- Team IICF`,
+        text: `Your IICF login OTP is ${otp}. Enter this code to access your account. It will expire in 10 minutes. - Team INDO ISLAMIC CULTURAL FOUNDATION`,
         priority: 'ndnd',
         stype: 'normal',
       };
