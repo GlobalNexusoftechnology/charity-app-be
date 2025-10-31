@@ -89,7 +89,7 @@ export class AuthService {
     const isUserExist = await this.usersService.findOne(signUpDto.phone_number);
 
     if (isUserExist) {
-      throw new BadRequestException('user with same email already exists');
+      throw new BadRequestException('User with same Phone No. already exists');
     }
     return {
       UserExist: isUserExist ?? false,
