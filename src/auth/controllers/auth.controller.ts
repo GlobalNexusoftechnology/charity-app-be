@@ -51,6 +51,7 @@ export class AuthController {
     @Body()
     signInDto: {
       phone_number: string;
+      type: 'login' | 'signup';
     },
     @Res({ passthrough: true }) response: Response,
   ) {
@@ -176,7 +177,7 @@ export class AuthController {
   @Public()
   @Post('send-otp')
   async sendOtp(@Body() dto: SendOtpDto) {
-    return this.otpService.sendOtp(dto.phone_number);
+    return this.otpService.sendOtp(dto.phone_number, dto.type);
   }
 
   @Public()

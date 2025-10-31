@@ -29,6 +29,7 @@ export class AuthService {
     response: Response,
     signInDto: {
       phone_number: string;
+      type: 'login' | 'signup';
     },
     redirect: boolean = false,
   ) {
@@ -40,7 +41,7 @@ export class AuthService {
     console.log('isUserExist', isUserExist);
 
     if (isUserExist) {
-      await this.otpService.sendOtp(signInDto.phone_number);
+      await this.otpService.sendOtp(signInDto.phone_number, signInDto.type);
       return { message: 'OTP has been sent' };
     } else {
       throw new BadRequestException('User does not exist');
@@ -89,7 +90,7 @@ export class AuthService {
     const isUserExist = await this.usersService.findOne(signUpDto.phone_number);
 
     if (isUserExist) {
-      throw new BadRequestException('email already exists');
+      throw new BadRequestException('user with same email already exists');
     }
     return {
       UserExist: isUserExist ?? false,
