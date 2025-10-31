@@ -41,11 +41,6 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  // @UseGuards(LocalAuthGuard)
-  // @RateLimit({
-  //   points: 5,
-  //   duration: 60,
-  // })
   @ApiOperation({ summary: 'User Login' })
   @ApiResponse({
     status: 200,

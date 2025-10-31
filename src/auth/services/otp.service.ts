@@ -3,6 +3,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { AuthProvider } from '../dto/create-user.dto';
@@ -10,10 +11,13 @@ import { VerifyUserDto } from '../dto/verify-user.dto';
 import { TokenPayload } from '../types/types';
 import { AuthService } from './auth.service';
 import { TwilioService } from './twilio.service';
+import axios from 'axios';
 
 @Injectable()
 export class OtpService {
   private otpStore: Map<string, string> = new Map();
+
+  private readonly logger = new Logger(OtpService.name);
 
   constructor(
     private readonly twilioService: TwilioService,
@@ -26,12 +30,50 @@ export class OtpService {
     return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
   }
 
-  async sendOtp(phoneNumber: string) {
+  // async sendOtp(phoneNumber: string) {
+  //   const otp = this.generateOtp();
+  //   await this.twilioService.sendOtp(phoneNumber, otp);
+  //   this.otpStore.set(phoneNumber, otp);
+  //   return { message: 'OTP sent successfully' };
+  // }
+
+  async sendOtp(phone: string): Promise<any> {
     const otp = this.generateOtp();
-    await this.twilioService.sendOtp(phoneNumber, otp);
-    this.otpStore.set(phoneNumber, otp);
-    return { message: 'OTP sent successfully' };
+    try {
+      const url = `https://bhashsms.com/api/sendmsg.php`;
+      const params = {
+        user: 'IICFSMS',
+        pass: '123456',
+        sender: 'IICFON',
+        phone: phone,
+        text: `Your IICF login OTP is ${otp}. Enter this code to access your account. It will expire in 10 minutes. - Team INDO ISLAMIC CULTURAL FOUNDATION`,
+        priority: 'ndnd',
+        stype: 'normal',
+      };
+
+      const response = await axios.get(url, { params });
+      this.logger.log(`OTP sent successfully to ${phone}`);
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      this.logger.error(`Failed to send OTP to ${phone}: ${error.message}`);
+      return {
+        success: false,
+        message: 'Failed to send OTP',
+        error: error.message,
+      };
+    }
   }
+
+  // async sendOtp(phoneNumber: string) {
+  //   const otp = this.generateOtp();
+  //   const otpUrl = `https://bhashsms.com/api/sendmsg.php?user=IICFSMS&pass=123456&sender=IICFON&phone=${phoneNumber}&text=Your%20IICF%20login%20OTP%20is%20${otp}.%20Enter%20this%20code%20to%20access%20your%20account.%20It%20will%20expire%20in%2010%20minutes.%20-%20Team%20INDO%20ISLAMIC%20CULTURAL%20FOUNDATION&priority=ndnd&stype=normal`;
+  //   this.otpStore.set(phoneNumber, otp);
+  //   return { message: 'OTP sent successfully' };
+  // }
 
   async verifyOtp(dto: VerifyUserDto) {
     const { phone_number, type, otp, username } = dto;
