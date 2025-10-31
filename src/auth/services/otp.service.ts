@@ -51,6 +51,8 @@ export class OtpService {
         stype: 'normal',
       };
 
+      this.otpStore.set(phone, otp);
+
       const response = await axios.get(url, { params });
       this.logger.log(`OTP sent successfully to ${phone}`);
 
@@ -77,6 +79,8 @@ export class OtpService {
 
   async verifyOtp(dto: VerifyUserDto) {
     const { phone_number, type, otp, username } = dto;
+
+    this.logger.log(`Verify OTP DTO ${JSON.stringify(dto)}`);
 
     const storedOtp = this.otpStore.get(phone_number);
 
