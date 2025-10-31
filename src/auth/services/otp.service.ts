@@ -46,7 +46,7 @@ export class OtpService {
         pass: '123456',
         sender: 'IICFON',
         phone: phone,
-        text: `Use the code ${otp} to verify your action. This code will expire in 10 minutes. - Team INDO ISLAMIC CULTURAL FOUNDATION`,
+        text: `Your IICF login OTP is ${otp}. Enter this code to access your account. It will expire in 10 minutes. - Team INDO ISLAMIC CULTURAL FOUNDATION`,
         priority: 'ndnd',
         stype: 'normal',
       };
