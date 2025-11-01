@@ -25,6 +25,20 @@ export class PaymentService {
     });
   }
 
+  generateRandomEmail(domain = 'iicf.com') {
+    const randomString = (length) => {
+      const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    };
+
+    const name = randomString(8); // random username part
+    return `${name}@${domain}`;
+  }
+
   async createOrder(
     amount: number,
     donor_name: string,
@@ -43,6 +57,7 @@ export class PaymentService {
       };
 
       const order = await this.razorpay.orders.create(options);
+      const donorEmail = donor_email ?? this.generateRandomEmail();
 
       const donation = this.donationRepository.create({
         donor_name,
@@ -54,7 +69,7 @@ export class PaymentService {
         donation_for,
         frequency,
         user_id,
-        donor_email,
+        donor_email: donorEmail,
       });
 
       await this.donationRepository.save(donation);
