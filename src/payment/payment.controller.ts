@@ -33,15 +33,26 @@ export class PaymentController {
   }
 
   @Post('verify')
-  async verifyPayment(@Body() verifyPaymentDto: VerifyPaymentDto) {
+  async verifyPayment(@Body() verificationData: VerifyPaymentDto) {
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
-      verifyPaymentDto;
+      verificationData;
     return await this.paymentService.verifyPayment(
-      razorpay_payment_id,
       razorpay_order_id,
+      razorpay_payment_id,
       razorpay_signature,
     );
   }
+
+  // @Post('verify')
+  // async verifyPayment(@Body() verifyPaymentDto: VerifyPaymentDto) {
+  //   const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+  //     verifyPaymentDto;
+  //   return await this.paymentService.verifyPayment(
+  //     razorpay_payment_id,
+  //     razorpay_order_id,
+  //     razorpay_signature,
+  //   );
+  // }
 
   @Get('donations')
   async getDonations() {

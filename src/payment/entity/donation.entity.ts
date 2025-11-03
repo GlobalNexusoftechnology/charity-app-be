@@ -37,6 +37,13 @@ export class Donations {
   @Column({ length: 100 })
   razorpay_order_id: string;
 
+  @Column({
+    type: 'enum',
+    enum: ['PENDING', 'SUCCESS', 'FAILED', 'CANCELLED'],
+    default: 'PENDING',
+  })
+  status: 'PENDING' | 'SUCCESS' | 'FAILED' | 'CANCELLED';
+
   @Column({ nullable: true })
   razorpay_signature: string;
 

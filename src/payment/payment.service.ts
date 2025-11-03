@@ -35,7 +35,7 @@ export class PaymentService {
       return result;
     };
 
-    const name = randomString(8); // random username part
+    const name = randomString(8);
     return `${name}@${domain}`;
   }
 
@@ -70,6 +70,7 @@ export class PaymentService {
         frequency,
         user_id,
         donor_email: donorEmail,
+        status: 'PENDING', // Assuming your Donation entity has a 'status' field
       });
 
       await this.donationRepository.save(donation);
@@ -98,16 +99,25 @@ export class PaymentService {
         .digest('hex');
 
       if (razorpay_signature === expectedSign) {
+        // **FIX 1: Update status to SUCCESS**
         await this.donationRepository.update(
           { razorpay_order_id },
           {
             razorpay_payment_id,
             razorpay_signature,
+            status: 'SUCCESS', // Key: Mark as successful
           },
         );
 
         return { status: 'success', message: 'Payment verified successfully' };
       } else {
+        // **FIX 3: Update status to FAILED on verification failure**
+        await this.donationRepository.update(
+          { razorpay_order_id },
+          {
+            status: 'FAILED', // Key: Mark as failed
+          },
+        );
         return { status: 'failed', message: 'Payment verification failed' };
       }
     } catch (error) {
