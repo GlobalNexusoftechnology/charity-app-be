@@ -7,7 +7,11 @@ import {
   IsDateString,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UpdateType, UpdatePriority } from '../entities/update.entity';
+import {
+  UpdateFrequency,
+  UpdatePriority,
+  UpdateType,
+} from '../enums/update.enums';
 
 export class CreateUpdateDto {
   @IsString()
@@ -24,6 +28,8 @@ export class CreateUpdateDto {
     enum: UpdateType,
     required: false,
     default: UpdateType.GENERAL,
+    description:
+      'Type of update. If type is GENERAL, it will be automatically pushed as a notification.',
   })
   type?: UpdateType;
 
@@ -55,4 +61,25 @@ export class CreateUpdateDto {
   @IsOptional()
   @ApiProperty({ required: false })
   expiresAt?: string;
+
+  @IsDateString()
+  @IsOptional()
+  @ApiProperty({
+    required: false,
+    description:
+      'Optional date and time when the update (and notification if GENERAL) should be pushed.',
+    example: '2025-11-05T15:30:00Z',
+  })
+  scheduledPushAt?: string;
+
+  @IsEnum(UpdateFrequency)
+  @IsOptional()
+  @ApiProperty({
+    enum: UpdateFrequency,
+    required: false,
+    default: UpdateFrequency.NONE,
+    description:
+      'Frequency of automatic push for GENERAL updates. e.g., WEEKLY, BIWEEKLY, MONTHLY, QUARTERLY.',
+  })
+  frequency?: UpdateFrequency;
 }

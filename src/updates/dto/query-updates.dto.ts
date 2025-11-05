@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsBoolean, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UpdateType, UpdatePriority } from '../entities/update.entity';
+import { UpdatePriority, UpdateType } from '../enums/update.enums';
 
 export class QueryUpdatesDto {
   @IsOptional()

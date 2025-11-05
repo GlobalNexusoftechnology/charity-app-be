@@ -1,4 +1,9 @@
 import {
+  UpdateFrequency,
+  UpdatePriority,
+  UpdateType,
+} from '../enums/update.enums';
+import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
@@ -6,21 +11,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-
-export enum UpdateType {
-  ANNOUNCEMENT = 'announcement',
-  MAINTENANCE = 'maintenance',
-  FEATURE = 'feature',
-  BUG_FIX = 'bug_fix',
-  GENERAL = 'general',
-}
-
-export enum UpdatePriority {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  URGENT = 'urgent',
-}
 
 @Entity('updates')
 export class Update {
@@ -64,6 +54,10 @@ export class Update {
   @ApiProperty({ required: false })
   expiresAt?: Date;
 
+  @Column({ type: 'timestamptz', nullable: true })
+  @ApiProperty()
+  scheduledPushAt?: Date;
+
   @CreateDateColumn()
   @ApiProperty()
   createdAt: Date;
@@ -71,4 +65,12 @@ export class Update {
   @UpdateDateColumn()
   @ApiProperty()
   updatedAt: Date;
+
+  @Column({
+    type: 'enum',
+    enum: UpdateFrequency,
+    default: UpdateFrequency.NONE,
+  })
+  @ApiProperty({ enum: UpdateFrequency })
+  frequency: UpdateFrequency;
 }
