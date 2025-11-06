@@ -82,6 +82,20 @@ export class Updatess1762416291378 implements MigrationInterface {
             type: 'timestamptz',
             isNullable: true,
           },
+          {
+            name: 'frequency',
+            type: 'enum',
+            enum: [
+              'none',
+              'daily',
+              'weekly',
+              'biweekly',
+              'monthly',
+              'quarterly',
+            ],
+            default: `'none'`,
+            isNullable: false,
+          },
         ],
       }),
     );
