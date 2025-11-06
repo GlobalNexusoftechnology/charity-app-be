@@ -71,12 +71,7 @@ export class Updatess1762416291378 implements MigrationInterface {
             default: 'CURRENT_TIMESTAMP',
             onUpdate: 'CURRENT_TIMESTAMP',
           },
-          {
-            name: 'frequency',
-            type: 'enum',
-            enum: ['none', 'daily', 'weekly', 'monthly'], // add the values you expect
-            default: "'none'",
-          },
+        
           {
             name: 'scheduledPushAt',
             type: 'timestamptz',
