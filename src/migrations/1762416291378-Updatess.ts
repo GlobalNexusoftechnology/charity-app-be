@@ -77,6 +77,11 @@ export class Updatess1762416291378 implements MigrationInterface {
             enum: ['none', 'daily', 'weekly', 'monthly'], // add the values you expect
             default: "'none'",
           },
+          {
+            name: 'scheduledPushAt',
+            type: 'timestamptz',
+            isNullable: true,
+          },
         ],
       }),
     );
