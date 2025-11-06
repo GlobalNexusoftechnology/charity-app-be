@@ -9,7 +9,7 @@ export class AddFrequencyColumnToUpdates1762359466132
       new TableColumn({
         name: 'frequency',
         type: 'enum',
-        enum: ['none', 'weekly', 'biweekly', 'monthly', 'quarterly'],
+        enum: ['none', 'daily', 'weekly', 'biweekly', 'monthly', 'quarterly'],
         default: `'none'`,
         isNullable: false,
       }),

@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class Updates1760511908302 implements MigrationInterface {
+export class Updatess1762416291378 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -70,6 +70,12 @@ export class Updates1760511908302 implements MigrationInterface {
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
             onUpdate: 'CURRENT_TIMESTAMP',
+          },
+          {
+            name: 'frequency',
+            type: 'enum',
+            enum: ['none', 'daily', 'weekly', 'monthly'], // add the values you expect
+            default: "'none'",
           },
         ],
       }),
