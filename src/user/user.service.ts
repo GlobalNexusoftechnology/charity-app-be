@@ -10,7 +10,7 @@ import { UpdateUserDto } from 'src/auth/dto/update-user.dto';
 export class UserService {
   constructor(
     @InjectRepository(Users) private userRepository: Repository<Users>,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto) {
     try {
@@ -71,5 +71,11 @@ export class UserService {
 
   async remove(id: string) {
     return await this.userRepository.update(id, { deleted: true });
+  }
+
+  async savePushToken(userId: string, token: string) {
+    await this.userRepository.update(userId, {
+      expo_push_token: token,
+    });
   }
 }

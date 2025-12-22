@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 import { UpdateUserDto } from 'src/auth/dto/update-user.dto';
 import { Authorize } from 'src/packages/authorization/roles.decorator';
 import { PermissionKey } from 'src/packages/authorization/permission-key.enum';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -45,5 +48,11 @@ export class UserController {
   @Authorize([PermissionKey.DeleteUser])
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
+  }
+
+  @Post('push-token')
+  @UseGuards(JwtAuthGuard)
+  savePushToken(@Req() req, @Body('expoPushToken') token: string) {
+    return this.userService.savePushToken(req.user.id, token);
   }
 }

@@ -34,4 +34,8 @@ export class Users extends UserBaseModifiedEntity {
 
   @Column({ type: 'boolean', default: false })
   is_verified: boolean;
+  expoPushToken: any;
+
+  @Column({ nullable: true })
+  expo_push_token?: string;
 }

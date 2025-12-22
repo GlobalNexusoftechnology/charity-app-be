@@ -13,11 +13,16 @@ import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { Notification } from './entities/notification.entity';
 import { NotificationsService } from './notification.service';
+import { BadRequestException } from '@nestjs/common';
+import { UserService } from 'src/user/user.service';
 
 @ApiTags('notifications')
 @Controller('notifications')
 export class NotificationsController {
-  constructor(private readonly service: NotificationsService) {}
+  constructor(
+    private readonly service: NotificationsService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create notification' })
@@ -56,4 +61,38 @@ export class NotificationsController {
   remove(@Param('id') id: string): Promise<void> {
     return this.service.remove(id);
   }
+
+
+  @Post('push')
+  @ApiOperation({ summary: 'Send push notification & save record' })
+  async pushNotification(
+    @Body()
+    body: {
+      title: string;
+      message: string;
+      userId: string;
+    },
+  ): Promise<Notification> {
+    const user = await this.userService.findOne(body.userId);
+
+    if (!user?.expoPushToken) {
+      throw new BadRequestException('User has no push token');
+    }
+
+    // 1️⃣ Send push notification
+    await this.service.sendPushNotification(
+      user.expoPushToken,
+      body.title,
+      body.message,
+    );
+
+    // 2️⃣ Save notification record (existing logic)
+    return this.service.create({
+      title: body.title,
+      message: body.message,
+      userId: body.userId,
+      isRead: false,
+    });
+  }
+
 }

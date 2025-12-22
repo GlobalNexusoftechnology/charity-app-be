@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Notification } from './entities/notification.entity';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import axios from 'axios';
 
 @Injectable()
 export class NotificationsService {
@@ -42,4 +43,25 @@ export class NotificationsService {
       throw new NotFoundException(`Notification ${id} not found`);
     }
   }
+
+  async sendPushNotification(
+  expoPushToken: string,
+  title: string,
+  message: string,
+) {
+  return axios.post(
+    'https://exp.host/--/api/v2/push/send',
+    {
+      to: expoPushToken,
+      title,
+      body: message,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+}
+
 }
