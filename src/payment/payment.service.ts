@@ -44,16 +44,7 @@ export class PaymentService {
     return `${name}@${domain}`;
   }
 
-  async createOrder(
-    amount: number,
-    donor_name: string,
-    donor_contact: string,
-    donation_type: string,
-    donation_for: string,
-    frequency: 'One-Time' | 'Recurring',
-    user_id?: string,
-    donor_email?: string,
-  ) {
+  async createOrder(amount: number) {
     try {
       const options = {
         amount: amount * 100,
@@ -62,23 +53,6 @@ export class PaymentService {
       };
 
       const order = await this.razorpay.orders.create(options);
-      const donorEmail = donor_email ?? this.generateRandomEmail();
-
-      const donation = this.donationRepository.create({
-        donor_name,
-        donor_contact,
-        amount,
-        currency: 'INR',
-        razorpay_order_id: order.id,
-        donation_type,
-        donation_for,
-        frequency,
-        user_id,
-        donor_email: donorEmail,
-        status: 'PENDING', // Assuming your Donation entity has a 'status' field
-      });
-
-      await this.donationRepository.save(donation);
 
       return {
         order_id: order.id,
@@ -95,6 +69,14 @@ export class PaymentService {
     razorpay_payment_id: string,
     razorpay_order_id: string,
     razorpay_signature: string,
+    amount: number,
+    donor_name: string,
+    donor_contact: string,
+    donation_type: string,
+    donation_for: string,
+    frequency: 'One-Time' | 'Recurring',
+    user_id?: string,
+    donor_email?: string,
   ) {
     try {
       const sign = razorpay_order_id + '|' + razorpay_payment_id;
@@ -104,15 +86,29 @@ export class PaymentService {
         .digest('hex');
 
       if (razorpay_signature === expectedSign) {
-        // **FIX 1: Update status to SUCCESS**
-        await this.donationRepository.update(
-          { razorpay_order_id },
-          {
+        if (razorpay_signature === expectedSign) {
+          const donation = this.donationRepository.create({
+            donor_name,
+            donor_contact,
+            donation_type,
+            donation_for,
+            frequency,
+            user_id,
+            donor_email: donor_email ?? this.generateRandomEmail(),
+            amount,
+            currency: 'INR',
+
+            razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature,
-            status: 'SUCCESS', // Key: Mark as successful
-          },
-        );
+
+            status: 'SUCCESS',
+          });
+
+          await this.donationRepository.save(donation);
+
+          return { status: 'success' };
+        }
 
         // 🔔 SEND PUSH NOTIFICATION (ONE-TIME DONATION)
         // const donation = await this.donationRepository.findOne({

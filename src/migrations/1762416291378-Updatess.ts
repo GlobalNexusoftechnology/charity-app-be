@@ -71,7 +71,6 @@ export class Updatess1762416291378 implements MigrationInterface {
             default: 'CURRENT_TIMESTAMP',
             onUpdate: 'CURRENT_TIMESTAMP',
           },
-        
           {
             name: 'scheduledPushAt',
             type: 'timestamptz',

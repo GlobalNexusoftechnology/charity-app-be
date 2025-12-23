@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateOrderDto } from './dto/createorder.dto';
-import { VerifyPaymentDto } from './dto/verifyorder.dto';
+// import { CreateOrderDto } from './dto/createorder.dto';
+// import { VerifyPaymentDto } from './dto/verifyorder.dto';
 import { PaymentService } from './payment.service';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 
@@ -8,40 +8,63 @@ import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
+  // @Post('create-order')
+  // async createOrder(@Body() createOrderDto: CreateOrderDto) {
+  //   const {
+  //     amount,
+  //     donor_name,
+  //     donor_contact,
+  //     donation_type,
+  //     donation_for,
+  //     frequency,
+  //     user_id,
+  //     donor_email,
+  //   } = createOrderDto;
+  //   return await this.paymentService.createOrder(
+  //     amount,
+  //     donor_name,
+  //     donor_contact,
+  //     donation_type,
+  //     donation_for,
+  //     frequency,
+  //     user_id,
+  //     donor_email,
+  //   );
+  // }
+
   @Post('create-order')
-  async createOrder(@Body() createOrderDto: CreateOrderDto) {
-    const {
-      amount,
-      donor_name,
-      donor_contact,
-      donation_type,
-      donation_for,
-      frequency,
-      user_id,
-      donor_email,
-    } = createOrderDto;
-    return await this.paymentService.createOrder(
-      amount,
-      donor_name,
-      donor_contact,
-      donation_type,
-      donation_for,
-      frequency,
-      user_id,
-      donor_email,
-    );
+  async createOrder(@Body() body: { amount: number }) {
+    return await this.paymentService.createOrder(body.amount);
   }
 
   @Post('verify')
-  async verifyPayment(@Body() verificationData: VerifyPaymentDto) {
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
-      verificationData;
+  async verifyPayment(@Body() body: any) {
     return await this.paymentService.verifyPayment(
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
+      body.razorpay_payment_id,
+      body.razorpay_order_id,
+      body.razorpay_signature,
+
+      body.amount,
+      body.donor_name,
+      body.donor_contact,
+      body.donation_type,
+      body.donation_for,
+      body.frequency,
+      body.user_id,
+      body.donor_email,
     );
   }
+
+  // @Post('verify')
+  // async verifyPayment(@Body() verificationData: VerifyPaymentDto) {
+  //   const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+  //     verificationData;
+  //   return await this.paymentService.verifyPayment(
+  //     razorpay_order_id,
+  //     razorpay_payment_id,
+  //     razorpay_signature,
+  //   );
+  // }
 
   // @Post('verify')
   // async verifyPayment(@Body() verifyPaymentDto: VerifyPaymentDto) {

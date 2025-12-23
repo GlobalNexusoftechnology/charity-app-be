@@ -13,14 +13,14 @@ export class Donations {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
-  donor_name: string;
+  @Column({ length: 100, nullable: true })
+  donor_name?: string;
+
+  @Column({ length: 15, nullable: true })
+  donor_contact?: string;
 
   @Column({ length: 100, nullable: true })
   donor_email?: string;
-
-  @Column({ length: 15 })
-  donor_contact: string;
 
   @Column('int')
   amount: number;
