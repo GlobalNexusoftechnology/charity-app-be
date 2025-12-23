@@ -7,6 +7,8 @@ import { Donations } from './entity/donation.entity';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { Subscription } from './entity/subscriptions.entity';
 import Razorpay from 'razorpay';
+// import { NotificationsService } from 'src/notification/notification.service';
+// import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class PaymentService {
@@ -18,6 +20,9 @@ export class PaymentService {
     private donationRepository: Repository<Donations>,
     @InjectRepository(Subscription)
     private subscriptionRepository: Repository<Subscription>,
+
+    // private readonly notificationsService: NotificationsService,
+    // private readonly userService: UserService,
   ) {
     this.razorpay = new Razorpay({
       key_id: this.configService.get('RAZORPAY_KEY_ID'),
@@ -108,6 +113,31 @@ export class PaymentService {
             status: 'SUCCESS', // Key: Mark as successful
           },
         );
+
+        // 🔔 SEND PUSH NOTIFICATION (ONE-TIME DONATION)
+        // const donation = await this.donationRepository.findOne({
+        //   where: { razorpay_order_id },
+        // });
+
+        // if (donation?.user_id) {
+        //   const user = await this.userService.update(donation.user_id, {});
+        //   // OR use findById if you have it
+
+        //   if (user?.expo_push_token) {
+        //     await this.notificationsService.sendPushNotification(
+        //       user.expo_push_token,
+        //       'Thank you for your donation ❤️',
+        //       `Your donation of ₹${donation.amount} was successful.`,
+        //     );
+
+        //     await this.notificationsService.create({
+        //       userId: donation.user_id,
+        //       title: 'Donation Successful',
+        //       message: `Thank you for donating ₹${donation.amount}.`,
+        //       isRead: false,
+        //     });
+        //   }
+        // }
 
         return { status: 'success', message: 'Payment verified successfully' };
       } else {
