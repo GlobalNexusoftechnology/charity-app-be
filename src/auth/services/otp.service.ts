@@ -52,7 +52,7 @@ export class OtpService {
         stype: 'normal',
       };
 
-      if (phone === '8459508857') {
+      if (phone === '+918459508857') {
         this.otpStore.set(phone, '000000');
       } else {
         this.otpStore.set(phone, otp);
@@ -102,7 +102,7 @@ export class OtpService {
         `OTP mismatch for ${phone_number}: entered ${otp}, expected ${storedOtp}`,
       );
       throw new BadRequestException('Invalid OTP');
-    } else if (phone_number === '8459508857') {
+    } else if (phone_number === '+918459508857') {
       const payload = {
         phone_number,
         username,
