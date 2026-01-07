@@ -61,7 +61,8 @@ export class PaymentService {
         key_id: this.configService.get('RAZORPAY_KEY_ID'),
       };
     } catch (error) {
-      throw new Error(`Failed to create order`, error);
+      throw new Error(`Failed to create order`);
+      console.log("error", error)
     }
   }
 
