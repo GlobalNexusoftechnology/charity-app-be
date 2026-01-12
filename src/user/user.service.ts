@@ -74,7 +74,7 @@ export class UserService {
       const user = await this.userRepository.findOne({
         where: {
           id,
-          status: UserStatus.ACTIVE,
+          // status: UserStatus.ACTIVE,
         },
       });
       if (!user) {
