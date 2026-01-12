@@ -195,14 +195,14 @@ export class UserService {
     }, {});
 
     return {
-      pendingDonations,
-      successDonations,
-      donationsByMonth,
-      totalOneTimeAmount,
-      totalDonationsAmount,
-      usersCount,
-      monthlyUsers,
-      totalRecurringAmount,
+      pendingDonations: pendingDonations,
+      successDonations: successDonations,
+      donationsByMonth: donationsByMonth,
+      totalOneTimeAmount: totalOneTimeAmount,
+      totalDonationsAmount: totalDonationsAmount,
+      usersCount: usersCount,
+      monthlyUsers: monthlyUsers,
+      totalRecurringAmount: totalRecurringAmount,
     };
   }
 }
