@@ -74,7 +74,7 @@ export class UserController {
   // Reports will move later
   @Get('report')
   @Authorize([PermissionKey.GetUser])
-  getReport(@Param('id') id: string, @Body() year: number) {
-    return this.userService.report(id, year);
+  getReport() {
+    return this.userService.report();
   }
 }

@@ -127,8 +127,8 @@ export class UserService {
   }
 
   // Report
-  async report(userId: string, year: number) {
-    const reqYear = year ?? 2026; // the year you want to analyze
+  async report() {
+    const reqYear = 2026; // the year you want to analyze
 
     const usersCount = await this.userRepository.count();
 
