@@ -9,7 +9,6 @@ export enum AuthProvider {
 export enum UserStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
-  SUSPENDED = 'suspended',
 }
 
 @Entity('users')
