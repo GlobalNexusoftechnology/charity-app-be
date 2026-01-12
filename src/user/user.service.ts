@@ -77,14 +77,16 @@ export class UserService {
           status: UserStatus.ACTIVE,
         },
       });
+
+      const allUsers = this.userRepository.find({
+        where: {
+          deleted: false,
+        },
+      });
       console.log(
         'user',
 
-        this.userRepository.find({
-          where: {
-            deleted: false,
-          },
-        }),
+        allUsers,
       );
       if (!user) {
         throw new BadRequestException('User does not exist');
