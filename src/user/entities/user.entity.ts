@@ -6,6 +6,12 @@ export enum AuthProvider {
   GOOGLE = 'google',
 }
 
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  SUSPENDED = 'suspended',
+}
+
 @Entity('users')
 export class Users extends UserBaseModifiedEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -38,4 +44,11 @@ export class Users extends UserBaseModifiedEntity {
 
   @Column({ nullable: true })
   expo_push_token?: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.ACTIVE,
+  })
+  status: UserStatus;
 }

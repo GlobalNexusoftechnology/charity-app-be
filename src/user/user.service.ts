@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Users } from './entities/user.entity';
+import { Users, UserStatus } from './entities/user.entity';
 // import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
@@ -10,7 +10,7 @@ import { UpdateUserDto } from 'src/auth/dto/update-user.dto';
 export class UserService {
   constructor(
     @InjectRepository(Users) private userRepository: Repository<Users>,
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     try {
@@ -53,6 +53,50 @@ export class UserService {
         where: {
           id,
           deleted: false,
+        },
+      });
+      if (!user) {
+        throw new BadRequestException('User does not exist');
+      }
+      user.modified_on = Math.floor(Date.now() / 1000);
+      await this.userRepository.update(id, updateUserDto);
+      return {
+        message: 'User updated successfully',
+      };
+    } catch (error) {
+      console.log('[Update User]:', error);
+      throw error;
+    }
+  }
+
+  async deactivateUser(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: {
+          id,
+          status: UserStatus.INACTIVE,
+        },
+      });
+      if (!user) {
+        throw new BadRequestException('User does not exist');
+      }
+      user.modified_on = Math.floor(Date.now() / 1000);
+      await this.userRepository.update(id, updateUserDto);
+      return {
+        message: 'User updated successfully',
+      };
+    } catch (error) {
+      console.log('[Update User]:', error);
+      throw error;
+    }
+  }
+
+  async activateUser(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: {
+          id,
+          status: UserStatus.ACTIVE,
         },
       });
       if (!user) {

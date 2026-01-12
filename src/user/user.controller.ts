@@ -44,6 +44,21 @@ export class UserController {
     return this.userService.update(id, updateUserDto);
   }
 
+  @Patch(':id/deactivate')
+  @Authorize([PermissionKey.EditUser])
+  deactivateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.deactivateUser(id, updateUserDto);
+  }
+
+  @Patch(':id/activate')
+  @Authorize([PermissionKey.EditUser])
+  activateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.activateUser(id, updateUserDto);
+  }
+
   @Delete(':id')
   @Authorize([PermissionKey.DeleteUser])
   remove(@Param('id') id: string) {
