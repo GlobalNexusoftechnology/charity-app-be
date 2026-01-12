@@ -74,9 +74,18 @@ export class UserService {
       const user = await this.userRepository.findOne({
         where: {
           id,
-          status: UserStatus.INACTIVE,
+          status: UserStatus.ACTIVE,
         },
       });
+      console.log(
+        'user',
+
+        this.userRepository.find({
+          where: {
+            deleted: false,
+          },
+        }),
+      );
       if (!user) {
         throw new BadRequestException('User does not exist');
       }
@@ -96,7 +105,7 @@ export class UserService {
       const user = await this.userRepository.findOne({
         where: {
           id,
-          status: UserStatus.ACTIVE,
+          status: UserStatus.INACTIVE,
         },
       });
       if (!user) {
