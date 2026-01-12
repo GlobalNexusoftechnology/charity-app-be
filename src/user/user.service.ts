@@ -5,11 +5,14 @@ import { Users, UserStatus } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 import { UpdateUserDto } from 'src/auth/dto/update-user.dto';
+import { Donations } from 'src/payment/entity/donation.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(Users) private userRepository: Repository<Users>,
+    @InjectRepository(Donations)
+    private donationRepository: Repository<Donations>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -121,5 +124,85 @@ export class UserService {
     await this.userRepository.update(userId, {
       expo_push_token: token,
     });
+  }
+
+  // Report
+  async report(userId: string, year: number) {
+    const reqYear = year ?? 2026; // the year you want to analyze
+
+    const usersCount = await this.userRepository.count();
+
+    const result = await this.donationRepository
+      .createQueryBuilder('donation')
+      .select('SUM(donation.amount)', 'total')
+      .getRawOne();
+
+    const totalDonationsAmount = Number(result.total) || 0;
+
+    const recurringAmount = await this.donationRepository
+      .createQueryBuilder('donation')
+      .select('SUM(donation.amount)', 'total')
+      .where('donation.frequency = :freq', { freq: 'Recurring' })
+      .getRawOne();
+
+    const totalRecurringAmount = Number(recurringAmount.total) || 0;
+
+    const onetimeAmount = await this.donationRepository
+      .createQueryBuilder('donation')
+      .select('SUM(donation.amount)', 'total')
+      .where('donation.frequency = :freq', { freq: 'One-Time' })
+      .getRawOne();
+
+    const totalOneTimeAmount = Number(onetimeAmount.total) || 0;
+
+    const donationsByMonthRaw = await this.donationRepository
+      .createQueryBuilder('donation')
+      .select("TO_CHAR(donation.created_at, 'Month')", 'month') // PostgreSQL
+      .addSelect('SUM(donation.amount)', 'total')
+      .where('donation.frequency = :freq', { freq: 'Recurring' })
+      .andWhere('EXTRACT(YEAR FROM donation.created_at) = :year', { reqYear })
+      .groupBy("TO_CHAR(donation.created_at, 'Month')")
+      .orderBy('MIN(EXTRACT(MONTH FROM donation.created_at))') // ensures Jan->Dec order
+      .getRawMany();
+
+    // Convert to object { monthName: totalAmount }
+    const donationsByMonth = donationsByMonthRaw.reduce((acc, curr) => {
+      acc[curr.month.trim()] = Number(curr.total) || 0;
+      return acc;
+    }, {});
+
+    const donations = await this.donationRepository.find({
+      where: [{ status: 'PENDING' }, { status: 'SUCCESS' }],
+    });
+
+    // Separate into two arrays
+    const pendingDonations = donations.filter((d) => d.status === 'PENDING');
+    const successDonations = donations.filter((d) => d.status === 'SUCCESS');
+
+    const monthlyUsersRaw = await this.userRepository
+      .createQueryBuilder('user')
+      .select("TO_CHAR(user.created_at, 'Month')", 'month') // PostgreSQL: month name
+      .addSelect('COUNT(user.id)', 'count')
+      .where('EXTRACT(YEAR FROM user.created_at) = :year', { reqYear })
+      .groupBy("TO_CHAR(user.created_at, 'Month')")
+      .orderBy('MIN(EXTRACT(MONTH FROM user.created_at))') // ensures Jan->Dec order
+      .getRawMany();
+
+    // Convert to object { monthName: count }
+    const monthlyUsers = monthlyUsersRaw.reduce((acc, curr) => {
+      acc[curr.month.trim()] = Number(curr.count) || 0;
+      return acc;
+    }, {});
+
+    return {
+      pendingDonations,
+      successDonations,
+      donationsByMonth,
+      totalOneTimeAmount,
+      totalDonationsAmount,
+      usersCount,
+      monthlyUsers,
+      totalRecurringAmount,
+    };
   }
 }

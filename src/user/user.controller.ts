@@ -70,4 +70,11 @@ export class UserController {
   savePushToken(@Req() req, @Body('expoPushToken') token: string) {
     return this.userService.savePushToken(req.user.id, token);
   }
+
+  // Reports will move later
+  @Get('report')
+  @Authorize([PermissionKey.GetUser])
+  getReport(@Param('id') id: string, @Body() year: number) {
+    return this.userService.report(id, year);
+  }
 }
