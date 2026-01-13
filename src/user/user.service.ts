@@ -194,15 +194,19 @@ export class UserService {
       return acc;
     }, {});
 
-    return {
-      pendingDonations: pendingDonations,
-      successDonations: successDonations,
-      donationsByMonth: donationsByMonth,
-      totalOneTimeAmount: totalOneTimeAmount,
-      totalDonationsAmount: totalDonationsAmount,
-      usersCount: usersCount,
-      monthlyUsers: monthlyUsers,
-      totalRecurringAmount: totalRecurringAmount,
+    const reportData = {
+      pendingDonations,
+      successDonations,
+      donationsByMonth,
+      totalOneTimeAmount,
+      totalDonationsAmount,
+      usersCount,
+      monthlyUsers,
+      totalRecurringAmount,
     };
+
+    console.log('[REPORT DATA]', reportData);
+
+    return reportData;
   }
 }
