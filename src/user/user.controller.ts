@@ -73,7 +73,7 @@ export class UserController {
 
   // Reports will move later
   @Get('report')
-  @Authorize([PermissionKey.GetUser])
+  // @Authorize([PermissionKey.GetUser])
   getReport() {
     return this.userService.report();
   }
