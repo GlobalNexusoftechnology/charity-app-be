@@ -194,15 +194,19 @@ export class UserService {
     //   return acc;
     // }, {});
 
-    return {
-      // pendingDonations: pendingDonations,
-      // successDonations: successDonations,
-      // donationsByMonth: donationsByMonth,
-      totalOneTimeAmount: totalOneTimeAmount,
-      totalDonationsAmount: totalDonationsAmount,
-      usersCount: usersCount,
-      // monthlyUsers: monthlyUsers,
-      totalRecurringAmount: totalRecurringAmount,
-    };
+    // return {
+      // // pendingDonations: pendingDonations,
+      // // successDonations: successDonations,
+      // // donationsByMonth: donationsByMonth,
+      // totalOneTimeAmount: totalOneTimeAmount,
+      // totalDonationsAmount: totalDonationsAmount,
+      // usersCount: usersCount,
+      // // monthlyUsers: monthlyUsers,
+      // totalRecurringAmount: totalRecurringAmount,
+
+    // };
+    return await this.userRepository.count();
+
+
   }
 }
