@@ -20,6 +20,13 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  // Reports will move later
+  @Get('report')
+  @Authorize([PermissionKey.GetUser])
+  getReport() {
+    return this.userService.report();
+  }
+
   @Post()
   @Authorize([PermissionKey.CreateUser])
   create(@Body() createUserDto: CreateUserDto) {
@@ -69,12 +76,5 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   savePushToken(@Req() req, @Body('expoPushToken') token: string) {
     return this.userService.savePushToken(req.user.id, token);
-  }
-
-  // Reports will move later
-  @Get('report')
-  // @Authorize([PermissionKey.GetUser])
-  getReport() {
-    return this.userService.report();
   }
 }

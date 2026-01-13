@@ -128,7 +128,7 @@ export class UserService {
 
   // Report
   async report() {
-    // const reqYear = 2026; // the year you want to analyze
+    const reqYear = 2026; // the year you want to analyze
 
     const usersCount = await this.userRepository.count();
 
@@ -155,58 +155,54 @@ export class UserService {
 
     const totalOneTimeAmount = Number(onetimeAmount.total) || 0;
 
-    // const donationsByMonthRaw = await this.donationRepository
-    //   .createQueryBuilder('donation')
-    //   .select("TO_CHAR(donation.created_at, 'Month')", 'month') // PostgreSQL
-    //   .addSelect('SUM(donation.amount)', 'total')
-    //   .where('donation.frequency = :freq', { freq: 'Recurring' })
-    //   .andWhere('EXTRACT(YEAR FROM donation.created_at) = :year', { reqYear })
-    //   .groupBy("TO_CHAR(donation.created_at, 'Month')")
-    //   .orderBy('MIN(EXTRACT(MONTH FROM donation.created_at))') // ensures Jan->Dec order
-    //   .getRawMany();
+    const donationsByMonthRaw = await this.donationRepository
+      .createQueryBuilder('donation')
+      .select("TO_CHAR(donation.created_at, 'Month')", 'month') // PostgreSQL
+      .addSelect('SUM(donation.amount)', 'total')
+      .where('donation.frequency = :freq', { freq: 'Recurring' })
+      .andWhere('EXTRACT(YEAR FROM donation.created_at) = :year', { reqYear })
+      .groupBy("TO_CHAR(donation.created_at, 'Month')")
+      .orderBy('MIN(EXTRACT(MONTH FROM donation.created_at))') // ensures Jan->Dec order
+      .getRawMany();
 
-    // // Convert to object { monthName: totalAmount }
-    // const donationsByMonth = donationsByMonthRaw.reduce((acc, curr) => {
-    //   acc[curr.month.trim()] = Number(curr.total) || 0;
-    //   return acc;
-    // }, {});
+    // Convert to object { monthName: totalAmount }
+    const donationsByMonth = donationsByMonthRaw.reduce((acc, curr) => {
+      acc[curr.month.trim()] = Number(curr.total) || 0;
+      return acc;
+    }, {});
 
-    // const donations = await this.donationRepository.find({
-    //   where: [{ status: 'PENDING' }, { status: 'SUCCESS' }],
-    // });
+    const donations = await this.donationRepository.find({
+      where: [{ status: 'PENDING' }, { status: 'SUCCESS' }],
+    });
 
-    // // Separate into two arrays
-    // const pendingDonations = donations.filter((d) => d.status === 'PENDING');
-    // const successDonations = donations.filter((d) => d.status === 'SUCCESS');
+    // Separate into two arrays
+    const pendingDonations = donations.filter((d) => d.status === 'PENDING');
+    const successDonations = donations.filter((d) => d.status === 'SUCCESS');
 
-    // const monthlyUsersRaw = await this.userRepository
-    //   .createQueryBuilder('user')
-    //   .select("TO_CHAR(user.created_at, 'Month')", 'month') // PostgreSQL: month name
-    //   .addSelect('COUNT(user.id)', 'count')
-    //   .where('EXTRACT(YEAR FROM user.created_at) = :year', { reqYear })
-    //   .groupBy("TO_CHAR(user.created_at, 'Month')")
-    //   .orderBy('MIN(EXTRACT(MONTH FROM user.created_at))') // ensures Jan->Dec order
-    //   .getRawMany();
+    const monthlyUsersRaw = await this.userRepository
+      .createQueryBuilder('user')
+      .select("TO_CHAR(user.created_at, 'Month')", 'month') // PostgreSQL: month name
+      .addSelect('COUNT(user.id)', 'count')
+      .where('EXTRACT(YEAR FROM user.created_at) = :year', { reqYear })
+      .groupBy("TO_CHAR(user.created_at, 'Month')")
+      .orderBy('MIN(EXTRACT(MONTH FROM user.created_at))') // ensures Jan->Dec order
+      .getRawMany();
 
-    // // Convert to object { monthName: count }
-    // const monthlyUsers = monthlyUsersRaw.reduce((acc, curr) => {
-    //   acc[curr.month.trim()] = Number(curr.count) || 0;
-    //   return acc;
-    // }, {});
+    // Convert to object { monthName: count }
+    const monthlyUsers = monthlyUsersRaw.reduce((acc, curr) => {
+      acc[curr.month.trim()] = Number(curr.count) || 0;
+      return acc;
+    }, {});
 
-    // return {
-      // // pendingDonations: pendingDonations,
-      // // successDonations: successDonations,
-      // // donationsByMonth: donationsByMonth,
-      // totalOneTimeAmount: totalOneTimeAmount,
-      // totalDonationsAmount: totalDonationsAmount,
-      // usersCount: usersCount,
-      // // monthlyUsers: monthlyUsers,
-      // totalRecurringAmount: totalRecurringAmount,
-
-    // };
-    return await this.userRepository.count();
-
-
+    return {
+      pendingDonations: pendingDonations,
+      successDonations: successDonations,
+      donationsByMonth: donationsByMonth,
+      totalOneTimeAmount: totalOneTimeAmount,
+      totalDonationsAmount: totalDonationsAmount,
+      usersCount: usersCount,
+      monthlyUsers: monthlyUsers,
+      totalRecurringAmount: totalRecurringAmount,
+    };
   }
 }
