@@ -41,9 +41,9 @@ export class ReportPdfService {
     doc.fontSize(14).text('Monthly User Registrations', { underline: true });
     doc.moveDown(0.5);
 
-    Object.entries(reportData.monthlyUsers).forEach(([month, count]: any) => {
-      doc.fontSize(11).text(`${month}: ${count} users`);
-    });
+    // Object.entries(reportData.monthlyUsers).forEach(([month, count]: any) => {
+    //   doc.fontSize(11).text(`${month}: ${count} users`);
+    // });
 
     doc.moveDown();
 
