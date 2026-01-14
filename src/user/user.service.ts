@@ -160,7 +160,9 @@ export class UserService {
       .select("TO_CHAR(donation.created_at, 'Month')", 'month') // PostgreSQL
       .addSelect('SUM(donation.amount)', 'total')
       .where('donation.frequency = :freq', { freq: 'Recurring' })
-      .andWhere('EXTRACT(YEAR FROM donation.created_at) = :year', { reqYear })
+      .andWhere('EXTRACT(YEAR FROM donation.created_at) = :year', {
+        year: reqYear,
+      })
       .groupBy("TO_CHAR(donation.created_at, 'Month')")
       .orderBy('MIN(EXTRACT(MONTH FROM donation.created_at))') // ensures Jan->Dec order
       .getRawMany();
