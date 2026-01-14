@@ -185,7 +185,7 @@ export class UserService {
       .createQueryBuilder('user')
       .select("TO_CHAR(user.created_at, 'Month')", 'month') // PostgreSQL: month name
       .addSelect('COUNT(user.id)', 'count')
-      .where('EXTRACT(YEAR FROM user.created_at) = :year', { reqYear })
+      .where('EXTRACT(YEAR FROM user.created_at) = :year', { year: reqYear })
       .groupBy("TO_CHAR(user.created_at, 'Month')")
       .orderBy('MIN(EXTRACT(MONTH FROM user.created_at))') // ensures Jan->Dec order
       .getRawMany();
