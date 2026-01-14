@@ -157,14 +157,14 @@ export class UserService {
 
     const donationsByMonthRaw = await this.donationRepository
       .createQueryBuilder('donation')
-      .select("TO_CHAR(donation.created_at, 'Month')", 'month') // PostgreSQL
+      .select("TO_CHAR(donation.created_at, 'Month')", 'month')
       .addSelect('SUM(donation.amount)', 'total')
       .where('donation.frequency = :freq', { freq: 'Recurring' })
       .andWhere('EXTRACT(YEAR FROM donation.created_at) = :year', {
         year: reqYear,
       })
       .groupBy("TO_CHAR(donation.created_at, 'Month')")
-      .orderBy('MIN(EXTRACT(MONTH FROM donation.created_at))') // ensures Jan->Dec order
+      .orderBy('MIN(EXTRACT(MONTH FROM "donation"."created_at"))')
       .getRawMany();
 
     // Convert to object { monthName: totalAmount }
@@ -183,11 +183,13 @@ export class UserService {
 
     const monthlyUsersRaw = await this.userRepository
       .createQueryBuilder('user')
-      .select("TO_CHAR(user.created_at, 'Month')", 'month') // PostgreSQL: month name
+      .select("TO_CHAR(user.created_at, 'Month')", 'month')
       .addSelect('COUNT(user.id)', 'count')
-      .where('EXTRACT(YEAR FROM user.created_at) = :year', { year: reqYear })
+      .where('EXTRACT(YEAR FROM user.created_at) = :year', {
+        year: reqYear,
+      })
       .groupBy("TO_CHAR(user.created_at, 'Month')")
-      .orderBy('MIN(EXTRACT(MONTH FROM user.created_at))') // ensures Jan->Dec order
+      .orderBy('MIN(EXTRACT(MONTH FROM "user"."created_at"))')
       .getRawMany();
 
     // Convert to object { monthName: count }
