@@ -181,22 +181,22 @@ export class UserService {
     const pendingDonations = donations.filter((d) => d.status === 'PENDING');
     const successDonations = donations.filter((d) => d.status === 'SUCCESS');
 
-    const monthlyUsersRaw = await this.userRepository
-      .createQueryBuilder('user')
-      .select("TO_CHAR(user.created_at, 'Month')", 'month')
-      .addSelect('COUNT(user.id)', 'count')
-      .where('EXTRACT(YEAR FROM user.created_at) = :year', {
-        year: reqYear,
-      })
-      .groupBy("TO_CHAR(user.created_at, 'Month')")
-      .orderBy('MIN(EXTRACT(MONTH FROM "user"."created_at"))')
-      .getRawMany();
+    // const monthlyUsersRaw = await this.userRepository
+    //   .createQueryBuilder('user')
+    //   .select("TO_CHAR(user.created_at, 'Month')", 'month')
+    //   .addSelect('COUNT(user.id)', 'count')
+    //   .where('EXTRACT(YEAR FROM user.created_at) = :year', {
+    //     year: reqYear,
+    //   })
+    //   .groupBy("TO_CHAR(user.created_at, 'Month')")
+    //   .orderBy('MIN(EXTRACT(MONTH FROM "user"."created_at"))')
+    //   .getRawMany();
 
-    // Convert to object { monthName: count }
-    const monthlyUsers = monthlyUsersRaw.reduce((acc, curr) => {
-      acc[curr.month.trim()] = Number(curr.count) || 0;
-      return acc;
-    }, {});
+    // // Convert to object { monthName: count }
+    // const monthlyUsers = monthlyUsersRaw.reduce((acc, curr) => {
+    //   acc[curr.month.trim()] = Number(curr.count) || 0;
+    //   return acc;
+    // }, {});
 
     const reportData = {
       pendingDonations,
@@ -205,7 +205,7 @@ export class UserService {
       totalOneTimeAmount,
       totalDonationsAmount,
       usersCount,
-      monthlyUsers,
+      // monthlyUsers,
       totalRecurringAmount,
     };
 
