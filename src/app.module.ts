@@ -16,6 +16,7 @@ import { FamilyMemberModule } from './family-member/family-member.module';
 import { UpdatesModule } from './updates/updates.module';
 import { NotificationsModule } from './notification/notification.module';
 import { ReportModule } from './report/report.module';
+import { CertificateModule } from './certificate/certificate.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ReportModule } from './report/report.module';
     FamilyMemberModule,
     UpdatesModule,
     ReportModule,
+    CertificateModule,
   ],
   controllers: [AppController, PdfController, ExcelController],
   providers: [AppService, PdfService, ExcelService],
