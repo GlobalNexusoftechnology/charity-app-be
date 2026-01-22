@@ -9,13 +9,23 @@ import * as puppeteer from 'puppeteer';
 export class CertificateService {
   constructor(private readonly pool: Pool) {}
 
-  async generateCertificatePdf(id: string) {
-    const htmlPath = path.join(__dirname, 'template/certificate.html');
-    const cssPath = path.join(__dirname, 'template/certificate.css');
+  async generateCertificatePdf(id: string): Promise<Buffer> {
+    // ✅ CORRECT ASSET PATHS (PROD SAFE)
+    const htmlPath = path.join(
+      process.cwd(),
+      'assets/certificate/template/certificate.html',
+    );
 
+    const cssPath = path.join(
+      process.cwd(),
+      'assets/certificate/template/certificate.css',
+    );
+
+    // ✅ READ FILES AT RUNTIME
     let html = fs.readFileSync(htmlPath, 'utf8');
     const css = fs.readFileSync(cssPath, 'utf8');
 
+    // ✅ TEMPLATE REPLACEMENTS
     html = html
       .replace('{{name}}', 'Faiz Ahmed')
       .replace(
@@ -28,6 +38,7 @@ export class CertificateService {
       )
       .replace('</head>', `<style>${css}</style></head>`);
 
+    // ✅ PUPPETEER (VPS SAFE)
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
