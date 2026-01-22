@@ -4,11 +4,14 @@ import * as path from 'path';
 
 @Injectable()
 export class ReportPdfService {
-  poppinsRegular = path.join(process.cwd(), 'assets/fonts/Poppins-Regular.ttf');
+  poppinsRegular = path.join(
+    process.cwd(),
+    'src/assets/fonts/Poppins-Regular.ttf',
+  );
 
   poppinsSemiBold = path.join(
     process.cwd(),
-    'assets/fonts/Poppins-SemiBold.ttf',
+    'src/assets/fonts/Poppins-SemiBold.ttf',
   );
 
   async generate(reportData: any): Promise<Buffer> {
