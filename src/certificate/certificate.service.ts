@@ -54,6 +54,6 @@ export class CertificateService {
 
     await browser.close();
 
-    return pdf;
+    return Buffer.from(pdf);
   }
 }
