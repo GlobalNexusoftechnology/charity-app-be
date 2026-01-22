@@ -194,8 +194,12 @@ export class UserService {
     });
 
     // Separate into two arrays
-    const pendingDonations = donations.filter((d) => d.status === 'PENDING');
-    const successDonations = donations.filter((d) => d.status === 'SUCCESS');
+    const pendingDonations = donations.filter(
+      (d) => d.status === 'PENDING',
+    ).length;
+    const successDonations = donations.filter(
+      (d) => d.status === 'SUCCESS',
+    ).length;
 
     // const monthlyUsersRaw = await this.userRepository
     //   .createQueryBuilder('user')
