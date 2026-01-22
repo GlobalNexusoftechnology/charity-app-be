@@ -23,7 +23,7 @@ export class ReportPdfService {
       doc.on('error', reject);
 
       const pageWidth = doc.page.width;
-      let y = 100; // 🔥 controlled vertical position
+      let y = 100;
 
       // ===== FONTS =====
       doc.registerFont('poppins', 'src/assets/fonts/Poppins-Regular.ttf');
@@ -31,96 +31,83 @@ export class ReportPdfService {
 
       // ===== HEADER =====
       doc.rect(0, 0, pageWidth, 80).fill('#1e40af');
-
       doc
         .font('poppinsBold')
         .fillColor('#ffffff')
         .fontSize(22)
-        .text('Donation Dashboard Report', 0, 30, {
-          align: 'center',
-        });
+        .text('Donation Dashboard Report', 0, 30, { align: 'center' });
 
       doc.fillColor('#000000');
 
-      // ===== SUMMARY CARD =====
-      doc
-        .roundedRect(40, y, pageWidth - 80, 130, 10)
-        .fill('#f8fafc')
-        .stroke('#c7d2fe');
+      // ===== TABLE DRAW FUNCTION (LOCAL) =====
+      const drawTable = (x: number, startY: number, rows: string[][]) => {
+        const colWidth = (pageWidth - 80) / 2;
+        const rowHeight = 22;
+        let currentY = startY;
 
-      doc
-        .font('poppinsBold')
-        .fontSize(14)
-        .fillColor('#1e40af')
-        .text('Summary', 55, y + 15);
+        rows.forEach((row, rowIndex) => {
+          let currentX = x;
 
-      doc.font('poppins').fontSize(11).fillColor('#000000');
+          row.forEach((cell) => {
+            doc.rect(currentX, currentY, colWidth, rowHeight).stroke();
 
-      let textY = y + 45;
-      doc.text(
-        `Total Donations Amount: ₹${reportData.totalDonationsAmount}`,
-        55,
-        textY,
-      );
-      doc.text(
-        `One-Time Donations: ₹${reportData.totalOneTimeAmount}`,
-        55,
-        (textY += 18),
-      );
-      doc.text(
-        `Recurring Donations: ₹${reportData.totalRecurringAmount}`,
-        55,
-        (textY += 18),
-      );
-      doc.text(`Total Users: ${reportData.usersCount}`, 55, (textY += 18));
+            doc
+              .font(rowIndex === 0 ? 'poppinsBold' : 'poppins')
+              .fontSize(11)
+              .text(cell, currentX + 6, currentY + 6, {
+                width: colWidth - 12,
+              });
 
-      y += 160;
+            currentX += colWidth;
+          });
 
-      // ===== MONTHLY DONATIONS =====
-      doc
-        .font('poppinsBold')
-        .fontSize(14)
-        .fillColor('#1e40af')
-        .text('Monthly Donations (Recurring)', 40, y);
+          currentY += rowHeight;
+        });
 
-      y += 25;
-      doc.font('poppins').fontSize(11).fillColor('#000000');
+        return currentY;
+      };
 
-      Object.entries(reportData.donationsByMonth).forEach(
-        ([month, amount]: any) => {
-          doc.circle(45, y + 6, 3).fill('#1e40af');
-
-          doc.fillColor('#000000').text(`${month}: ₹${amount}`, 55, y);
-
-          y += 18;
-        },
-      );
-
+      // ===== SUMMARY TABLE =====
+      doc.font('poppinsBold').fontSize(14).fillColor('#1e40af');
+      doc.text('Summary', 40, y);
       y += 20;
 
-      // ===== STATUS CARD =====
-      doc
-        .roundedRect(40, y, pageWidth - 80, 90, 10)
-        .fill('#ecfeff')
-        .stroke('#67e8f9');
+      y = drawTable(40, y, [
+        ['Metric', 'Value'],
+        ['Total Donations Amount', `₹${reportData.totalDonationsAmount}`],
+        ['One-Time Donations', `₹${reportData.totalOneTimeAmount}`],
+        ['Recurring Donations', `₹${reportData.totalRecurringAmount}`],
+        ['Total Users', `${reportData.usersCount}`],
+      ]);
 
-      doc
-        .font('poppinsBold')
-        .fontSize(14)
-        .fillColor('#0f766e')
-        .text('Donation Status Overview', 55, y + 15);
+      // ===== MONTHLY DONATIONS TABLE =====
+      y += 30;
+      doc.font('poppinsBold').fontSize(14).fillColor('#1e40af');
+      doc.text('Monthly Donations (Recurring)', 40, y);
+      y += 20;
 
-      doc.font('poppins').fontSize(11).fillColor('#000000');
+      y = drawTable(40, y, [
+        ['Month', 'Amount'],
+        ...Object.entries(reportData.donationsByMonth).map(
+          ([month, amount]: any) => [month, `₹${amount}`],
+        ),
+      ]);
 
-      doc.text(`Pending Donations: ${reportData.pendingDonations}`, 55, y + 45);
-      doc.text(
-        `Successful Donations: ${reportData.successDonations}`,
-        55,
-        y + 63,
-      );
+      // ===== DONATION STATUS TABLE =====
+      y += 30;
+      doc.font('poppinsBold').fontSize(14).fillColor('#0f766e');
+      doc.text('Donation Status Overview', 40, y);
+      y += 20;
+
+      drawTable(40, y, [
+        ['Status', 'Count'],
+        ['Pending Donations', `${reportData.pendingDonations}`],
+        ['Successful Donations', `${reportData.successDonations}`],
+      ]);
 
       // ===== FOOTER =====
       doc
+        .font('poppins')
         .fontSize(9)
         .fillColor('#6b7280')
         .text(
