@@ -1,8 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import PDFDocument from 'pdfkit';
+import * as path from 'path';
 
 @Injectable()
 export class ReportPdfService {
+  poppinsRegular = path.join(process.cwd(), 'assets/fonts/Poppins-Regular.ttf');
+
+  poppinsSemiBold = path.join(
+    process.cwd(),
+    'assets/fonts/Poppins-SemiBold.ttf',
+  );
+
   async generate(reportData: any): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const doc = new PDFDocument({ size: 'A4', margin: 40 });
@@ -12,12 +20,17 @@ export class ReportPdfService {
       doc.on('end', () => resolve(Buffer.concat(buffers)));
       doc.on('error', reject);
 
+      // ✅ REGISTER FONTS
+      doc.registerFont('poppins', this.poppinsRegular);
+      doc.registerFont('poppinsBold', this.poppinsSemiBold);
+
       const pageWidth = doc.page.width;
 
       /* ===== HEADER ===== */
       doc.rect(0, 0, pageWidth, 80).fill('#1e3a8a');
 
       doc
+        .font('poppinsBold')
         .fillColor('#ffffff')
         .fontSize(22)
         .text('Donation Dashboard Report', 0, 30, {
@@ -27,63 +40,50 @@ export class ReportPdfService {
       doc.moveDown(3);
       doc.fillColor('#000000');
 
-      /* ===== SUMMARY CARD ===== */
+      /* ===== SUMMARY ===== */
       doc
-        .roundedRect(40, doc.y, pageWidth - 80, 120, 8)
-        .fill('#f8fafc')
-        .stroke('#c7d2fe');
-
-      doc
+        .font('poppinsBold')
         .fontSize(14)
         .fillColor('#1e3a8a')
-        .text('Summary', 50, doc.y + 10, { underline: true });
+        .text('Summary', { underline: true });
 
-      doc.moveDown();
-      doc.fontSize(11).fillColor('#000000');
+      doc.moveDown(0.5);
 
+      doc.font('poppins').fontSize(11);
       doc.text(`Total Donations Amount: ₹${reportData.totalDonationsAmount}`);
       doc.text(`One-Time Donations: ₹${reportData.totalOneTimeAmount}`);
       doc.text(`Recurring Donations: ₹${reportData.totalRecurringAmount}`);
       doc.text(`Total Users: ${reportData.usersCount}`);
 
-      doc.moveDown(2);
+      doc.moveDown();
 
       /* ===== MONTHLY DONATIONS ===== */
       doc
+        .font('poppinsBold')
         .fontSize(14)
         .fillColor('#1e3a8a')
         .text('Monthly Donations (Recurring)', { underline: true });
 
       doc.moveDown(0.5);
-      doc.fontSize(11).fillColor('#000000');
+      doc.font('poppins').fontSize(11);
 
       Object.entries(reportData.donationsByMonth).forEach(
         ([month, amount]: any) => {
-          doc
-            .circle(50, doc.y + 6, 2)
-            .fill('#1e3a8a')
-            .fillColor('#000000')
-            .text(`${month}: ₹${amount}`, 60);
+          doc.text(`• ${month}: ₹${amount}`);
         },
       );
 
-      doc.moveDown(2);
+      doc.moveDown();
 
       /* ===== DONATION STATUS ===== */
       doc
-        .roundedRect(40, doc.y, pageWidth - 80, 90, 8)
-        .fill('#ecfeff')
-        .stroke('#67e8f9');
-
-      doc
-        .fillColor('#0f766e')
+        .font('poppinsBold')
         .fontSize(14)
-        .text('Donation Status Overview', 50, doc.y + 10, {
-          underline: true,
-        });
+        .fillColor('#0f766e')
+        .text('Donation Status Overview', { underline: true });
 
-      doc.moveDown();
-      doc.fontSize(11).fillColor('#000000');
+      doc.moveDown(0.5);
+      doc.font('poppins').fontSize(11).fillColor('#000000');
 
       doc.text(`Pending Donations: ${reportData.pendingDonations}`);
       doc.text(`Successful Donations: ${reportData.successDonations}`);
@@ -91,6 +91,7 @@ export class ReportPdfService {
       /* ===== FOOTER ===== */
       doc.moveDown(3);
       doc
+        .font('poppins')
         .fontSize(9)
         .fillColor('#6b7280')
         .text(`Generated on ${new Date().toLocaleDateString()}`, {
