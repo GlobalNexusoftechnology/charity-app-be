@@ -201,34 +201,6 @@ export class UserService {
       (d) => d.status === 'SUCCESS',
     ).length;
 
-    // const monthlyUsersRaw = await this.userRepository
-    //   .createQueryBuilder('user')
-    //   .select('EXTRACT(MONTH FROM user.created_at)', 'month')
-    //   .addSelect('COUNT(user.id)', 'count')
-    //   .where('EXTRACT(YEAR FROM user.created_at) = :year', {
-    //     year: reqYear,
-    //   })
-    //   .groupBy('EXTRACT(MONTH FROM user.created_at)')
-    //   .orderBy('month', 'ASC')
-    //   .getRawMany();
-
-    // // Initialize all months with 0
-    // const monthlyUsers = this.monthNames.reduce(
-    //   (acc, month) => {
-    //     acc[month] = 0;
-    //     return acc;
-    //   },
-    //   {} as Record<string, number>,
-    // );
-
-    // // Fill actual values
-    // monthlyUsersRaw.forEach((row) => {
-    //   const monthIndex = Number(row.month) - 1;
-    //   if (monthIndex >= 0 && monthIndex < 12) {
-    //     monthlyUsers[this.monthNames[monthIndex]] = Number(row.count) || 0;
-    //   }
-    // });
-
     const reportData = {
       pendingDonations,
       successDonations,
@@ -236,7 +208,6 @@ export class UserService {
       totalOneTimeAmount,
       totalDonationsAmount,
       usersCount,
-      // monthlyUsers,
       totalRecurringAmount,
     };
 
