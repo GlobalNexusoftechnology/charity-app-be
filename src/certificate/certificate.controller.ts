@@ -9,7 +9,8 @@ export class CertificateController {
 
   @Get(':name/download')
   async download(@Param('name') name: string, @Res() res: Response) {
-    const pdfBuffer = await this.certificateService.generateCertificatePdf(id);
+    const pdfBuffer =
+      await this.certificateService.generateCertificatePdf(name);
 
     res.set({
       'Content-Type': 'application/pdf',
