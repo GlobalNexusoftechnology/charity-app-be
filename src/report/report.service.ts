@@ -22,7 +22,7 @@ export class ReportPdfService {
       let y = 100;
 
       const doc = new PDFDocument({
-        size: [PAGE_WIDTH, 1000], // temp height
+        size: [PAGE_WIDTH, 421], // temp height
         margins: {
           top: TOP_MARGIN,
           bottom: BOTTOM_MARGIN,
