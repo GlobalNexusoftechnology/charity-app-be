@@ -7,13 +7,13 @@ import { CertificateService } from './certificate.service';
 export class CertificateController {
   constructor(private readonly certificateService: CertificateService) {}
 
-  @Get(':id/download')
-  async download(@Param('id') id: string, @Res() res: Response) {
+  @Get(':name/download')
+  async download(@Param('name') name: string, @Res() res: Response) {
     const pdfBuffer = await this.certificateService.generateCertificatePdf(id);
 
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename=certificate-${id}.pdf`,
+      'Content-Disposition': `attachment; filename=certificate-${name}.pdf`,
       'Content-Length': pdfBuffer.length,
     });
 

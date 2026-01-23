@@ -11,7 +11,7 @@ import * as puppeteer from 'puppeteer';
 export class CertificateService {
   constructor(private readonly pool: Pool) {}
 
-  async generateCertificatePdf(id: string): Promise<Buffer> {
+  async generateCertificatePdf(name: string): Promise<Buffer> {
     // ✅ CORRECT ASSET PATHS (PROD SAFE)
     const htmlPath = path.join(
       __dirname,
@@ -29,7 +29,7 @@ export class CertificateService {
 
     // ✅ TEMPLATE REPLACEMENTS
     html = html
-      .replace('{{name}}', 'Faiz Ahmed')
+      .replace('{{name}}', name)
       .replace(
         '{{date}}',
         new Date().toLocaleDateString('en-IN', {
