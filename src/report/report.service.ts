@@ -124,7 +124,7 @@ export class ReportPdfService {
         });
 
       // 🔥 Resize page to actual content height
-      doc.page.height = y + BOTTOM_MARGIN;
+      // doc.page.height = y + BOTTOM_MARGIN;
 
       doc.end();
     });
