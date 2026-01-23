@@ -14,13 +14,13 @@ export class CertificateService {
   async generateCertificatePdf(id: string): Promise<Buffer> {
     // ✅ CORRECT ASSET PATHS (PROD SAFE)
     const htmlPath = path.join(
-      process.cwd(),
-      'dist/assets/certificate/template/certificate.html',
+      __dirname,
+      '../../assets/certificate/template/certificate.html',
     );
 
     const cssPath = path.join(
-      process.cwd(),
-      'dist/assets/certificate/template/certificate.css',
+      __dirname,
+      '../../assets/certificate/template/certificate.css',
     );
 
     // ✅ READ FILES AT RUNTIME
