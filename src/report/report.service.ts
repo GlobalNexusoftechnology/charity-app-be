@@ -105,18 +105,6 @@ export class ReportPdfService {
         ['Successful Donations', `${reportData.successDonations}`],
       ]);
 
-      // ===== FOOTER =====
-      doc
-        .font('poppins')
-        .fontSize(9)
-        .fillColor('#6b7280')
-        .text(
-          `Generated on ${new Date().toLocaleDateString()}`,
-          40,
-          doc.page.height - 50,
-          { align: 'right' },
-        );
-
       doc.end();
     });
   }
