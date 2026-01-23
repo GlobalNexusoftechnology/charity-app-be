@@ -26,8 +26,8 @@ export class ReportPdfService {
       let y = 100;
 
       // ===== FONTS =====
-      doc.registerFont('poppins', 'src/assets/fonts/Poppins-Regular.ttf');
-      doc.registerFont('poppinsBold', 'src/assets/fonts/Poppins-SemiBold.ttf');
+      doc.registerFont('poppins', 'assets/fonts/Poppins-Regular.ttf');
+      doc.registerFont('poppinsBold', 'assets/fonts/Poppins-SemiBold.ttf');
 
       // ===== HEADER =====
       doc.rect(0, 0, pageWidth, 80).fill('#1e40af');

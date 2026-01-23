@@ -1,3 +1,5 @@
+/* The `CertificateService` class in TypeScript generates a PDF certificate by reading HTML and CSS
+files, replacing placeholders, and using Puppeteer for rendering. */
 // certificate.service.ts
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
