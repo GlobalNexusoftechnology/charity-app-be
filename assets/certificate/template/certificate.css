@@ -6,7 +6,8 @@ body {
 .certificate {
   width: 1123px;
   height: 794px;
-  background: url('CERTIFICATE_IMAGE_URL_HERE') no-repeat center;
+  background: url('https://i.etsystatic.com/11323145/r/il/7f7042/1489349106/il_fullxfull.1489349106_o3z1.jpg')
+    no-repeat center;
   background-size: cover;
   padding: 120px 100px;
   box-sizing: border-box;
