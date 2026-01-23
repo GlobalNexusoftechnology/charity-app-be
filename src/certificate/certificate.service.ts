@@ -15,12 +15,12 @@ export class CertificateService {
     // ✅ CORRECT ASSET PATHS (PROD SAFE)
     const htmlPath = path.join(
       process.cwd(),
-      'assets/certificate/template/certificate.html',
+      'dist/assets/certificate/template/certificate.html',
     );
 
     const cssPath = path.join(
       process.cwd(),
-      'assets/certificate/template/certificate.css',
+      'dist/assets/certificate/template/certificate.css',
     );
 
     // ✅ READ FILES AT RUNTIME
