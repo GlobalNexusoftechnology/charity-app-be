@@ -57,7 +57,7 @@ export class CertificateService {
     await page.setContent(html, { waitUntil: 'networkidle0' });
 
     const pdf = await page.pdf({
-      format: 'A4',
+      format: 'A5',
       printBackground: true,
     });
 
