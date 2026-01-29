@@ -25,7 +25,7 @@ export class OtpService {
     @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
     private usersService: UserService,
-  ) { }
+  ) {}
 
   generateOtp(): string {
     return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
@@ -58,7 +58,9 @@ export class OtpService {
         this.otpStore.set(phone, otp);
       }
 
-      const response = await axios.get(url, { params });
+      const url2 = `http://bhashsms.com/api/sendmsg.php?user=IICFSMS&pass=123456&sender=IICFON&phone=${phone}&text=Your%20IICF%20login%20OTP%20is%20${otp}.%0AEnter%20this%20code%20to%20access%20your%20account.%20It%20will%20expire%20in%2010%20minutes.%0A-%20Team%20INDO%20ISLAMIC%20CULTURAL%20FOUNDATION&priority=ndnd&stype=normal`;
+      // const response = await axios.get(url, { params });
+      const response = await axios.get(url2, { params });
       this.logger.log(`OTP sent successfully to ${phone}`);
 
       return {
