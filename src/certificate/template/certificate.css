@@ -1,16 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Playlist+Script&display=swap');
+
+html,
 body {
+  width: 100%;
+  height: 100%;
   margin: 0;
-  font-family: Georgia, serif;
+}
+
+@page {
+  size: A4 landscape;
+  margin: 0;
 }
 
 .certificate {
+  font-family: 'Playlist Script', cursive;
   width: 1123px;
   height: 794px;
-  background: url('CERTIFICATE_IMAGE_URL_HERE') no-repeat center;
+  background: url('https://res.cloudinary.com/dhwohyls5/image/upload/v1769759090/WhatsApp_Image_2026-01-30_at_12.51.21_PM_pb1j2o.jpg')
+    no-repeat center;
   background-size: cover;
   padding: 120px 100px;
   box-sizing: border-box;
-  text-align: center;
 }
 
 .title {
@@ -37,11 +47,12 @@ body {
 }
 
 .name {
+  font-family: 'Playlist Script', cursive;
   font-size: 36px;
   padding: 0 20px;
-  background: #f4f1dc; /* match background color */
   position: relative;
-  top: 18px;
+  top: 190px;
+  left: 20px;
 }
 
 .description {
