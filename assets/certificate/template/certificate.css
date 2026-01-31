@@ -9,7 +9,8 @@
 
 @font-face {
   font-family: 'Playlist';
-  src: url('../fonts/playlist-script/Playlist-Script.woff') format('woff');
+  src: url('https://charity-api.giganexustechnology.com/fonts/playlist-script/Playlist-Script.woff')
+    format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -76,7 +77,8 @@ body {
 }
 
 .name {
-  font-family: 'Playlist', cursive;
+  /* font-family: 'Playlist', cursive; */
+  font-family: 'Playlist' !important;
   font-size: 36px;
   padding: 0 20px;
   position: relative;
