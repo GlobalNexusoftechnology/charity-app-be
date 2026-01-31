@@ -1,7 +1,7 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Playlist+Script&display=swap'); */
 
 @font-face {
-  font-family: 'Playlist Script';
+  font-family: 'Playlist';
   src: url('../fonts/playlist-script/Playlist-Script.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
@@ -30,7 +30,7 @@ body {
 }
 
 .certificate {
-  font-family: 'Playlist Script', cursive;
+  font-family: 'Playlist', cursive;
   width: 1123px;
   height: 794px;
   background: url('https://res.cloudinary.com/dhwohyls5/image/upload/v1769759090/WhatsApp_Image_2026-01-30_at_12.51.21_PM_pb1j2o.jpg')
@@ -64,7 +64,7 @@ body {
 }
 
 .name {
-  font-family: 'Playlist Script', cursive;
+  font-family: 'Playlist', cursive;
   font-size: 36px;
   padding: 0 20px;
   position: relative;
