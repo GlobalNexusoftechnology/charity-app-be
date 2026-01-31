@@ -1,8 +1,15 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Playlist+Script&display=swap'); */
 
-@font-face {
+/* @font-face {
   font-family: 'Playlist';
   src: url('../fonts/playlist-script/Playlist-Script.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+} */
+
+@font-face {
+  font-family: 'Playlist';
+  src: url('../fonts/playlist-script/Playlist-Script.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -29,8 +36,13 @@ body {
   margin: 0;
 }
 
+* {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
 .certificate {
-  font-family: 'Playlist', cursive;
+  font-family: 'Playlist' !important;
   width: 1123px;
   height: 794px;
   background: url('https://res.cloudinary.com/dhwohyls5/image/upload/v1769759090/WhatsApp_Image_2026-01-30_at_12.51.21_PM_pb1j2o.jpg')
@@ -64,7 +76,7 @@ body {
 }
 
 .name {
-  font-family: 'Playlist', cursive;
+  font-family: 'Playlist' !important;
   font-size: 36px;
   padding: 0 20px;
   position: relative;
