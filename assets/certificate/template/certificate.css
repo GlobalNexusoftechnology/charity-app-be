@@ -1,4 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Playlist+Script&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Playlist+Script&display=swap'); */
+
+@font-face {
+  font-family: 'Playlist Script';
+  src: url('../fonts/playlist-script/Playlist-Script.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Playlist Caps';
+  src: url('../fonts/playlist-script/Playlist Caps.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Playlist Ornament';
+  src: url('../fonts/playlist-script/Playlist Ornament.otf') format('opentype');
+}
 
 html,
 body {
