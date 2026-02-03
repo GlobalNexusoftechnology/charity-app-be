@@ -1,7 +1,9 @@
 @font-face {
-  font-family: 'Style Script';
-  src: url('https://charity-api.giganexustechnology.com/assets/certificate/StyleScript-Regular.ttf')
-    format('truetype');
+  font-family: 'StyleScript';
+  /* src: url('https://charity-api.giganexustechnology.com/assets/certificate/StyleScript-Regular.ttf') */
+  /* format('truetype'); */
+  src: url('./StyleScript-Regular.ttf') format('truetype');
+
   font-weight: 400;
   font-style: normal;
 }
@@ -24,7 +26,7 @@ body {
 }
 
 .certificate {
-  font-family: 'Style Script', cursive;
+  font-family: 'StyleScript', cursive;
   width: 1123px;
   height: 794px;
   background: url('https://res.cloudinary.com/dhwohyls5/image/upload/v1769759090/WhatsApp_Image_2026-01-30_at_12.51.21_PM_pb1j2o.jpg')
@@ -58,7 +60,7 @@ body {
 }
 
 .name {
-  font-family: 'Style Script', cursive;
+  font-family: 'StyleScript', cursive;
   font-size: 36px;
   padding: 0 20px;
   position: relative;
@@ -76,4 +78,9 @@ body {
   margin-top: 60px;
   font-size: 24px;
   letter-spacing: 1px;
+}
+
+.certificate,
+.name {
+  font-family: 'StyleScript', cursive;
 }
