@@ -43,7 +43,11 @@ body {
 }
 
 .certificate {
-  font-family: 'Playlist', cursive;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
   width: 1123px;
   height: 794px;
   background: url('https://res.cloudinary.com/dhwohyls5/image/upload/v1769759090/WhatsApp_Image_2026-01-30_at_12.51.21_PM_pb1j2o.jpg')
@@ -78,7 +82,7 @@ body {
 
 .name {
   /* font-family: 'Playlist', cursive; */
-  font-family: 'Playlist' !important;
+  font-family: 'Playlist' cursive !important;
   font-size: 36px;
   padding: 0 20px;
   position: relative;
