@@ -81,8 +81,7 @@ body {
 }
 
 .name {
-  /* font-family: 'Playlist', cursive; */
-  font-family: 'Playlist' cursive !important;
+  font-family: 'Noto Sans Devanagari', sans-serif;
   font-size: 36px;
   padding: 0 20px;
   position: relative;
