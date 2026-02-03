@@ -1,9 +1,16 @@
+@font-face {
+  font-family: 'Style Script';
+  src: url('https://charity-api.giganexustechnology.com/certificate/StyleScript-Regular.ttf')
+    format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
 html,
 body {
   width: 100%;
   height: 100%;
   margin: 0;
-  font-family: 'Noto Sans Devanagari', sans-serif;
 }
 
 @page {
@@ -17,11 +24,7 @@ body {
 }
 
 .certificate {
-  font-family: 'Noto Sans Devanagari', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: normal;
-  font-style: normal;
-  font-variation-settings: 'wdth' 100;
+  font-family: 'Style Script', cursive;
   width: 1123px;
   height: 794px;
   background: url('https://res.cloudinary.com/dhwohyls5/image/upload/v1769759090/WhatsApp_Image_2026-01-30_at_12.51.21_PM_pb1j2o.jpg')
@@ -55,7 +58,7 @@ body {
 }
 
 .name {
-  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-family: 'Style Script', cursive;
   font-size: 36px;
   padding: 0 20px;
   position: relative;
